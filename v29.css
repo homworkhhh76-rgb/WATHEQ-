@@ -1,0 +1,29 @@
+/* Compact controls with fixed proportions on backwards phone and desktop. */
+body.w28-more .more-summary .round-chevron{display:grid!important;place-items:center!important;flex:0 0 28px!important;width:28px!important;min-width:28px!important;max-width:28px!important;height:28px!important;min-height:28px!important;aspect-ratio:1;border-radius:50%!important;padding:0!important;box-sizing:border-box}
+#typographyBtn,.header-spinner,[data-w25-refresh]{display:none!important}
+#payments{overflow:visible!important;width:100%;min-width:0}
+#payments .payment-row{width:100%!important;min-width:0!important;max-width:100%!important;grid-template-columns:minmax(0,1.5fr) minmax(0,.85fr) minmax(0,.7fr) minmax(0,.85fr) 28px!important;gap:6px!important;overflow:visible!important;padding:10px 0!important}
+#payments .payment-row>*{grid-column:auto!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}
+#payments .payment-row input,#payments .payment-row .select-trigger,#payments .payment-row>select:not(.enhanced-select){height:42px!important;min-height:42px!important;font-size:11px!important;padding:6px!important;width:100%!important;border-radius:10px!important}
+#payments .payment-row .select-trigger{display:flex!important;align-items:center;gap:2px!important;overflow:hidden}
+#payments .payment-row .select-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+#payments .payment-row .select-trigger svg{width:12px!important;min-width:12px!important;height:12px!important}
+#payments .payment-row>button:not(.select-trigger){width:28px!important;min-width:28px!important;height:34px!important;min-height:34px!important;padding:3px!important;grid-column:auto!important;font-size:18px!important;background:#fff0f2;color:#d04e61;border-radius:9px}
+#w28Settings .w28-logo-box{padding:16px!important;border-radius:18px;margin:16px 0!important}
+#w28Settings .w28-logo-box>div{display:flex;align-items:center;gap:14px;flex-wrap:nowrap;margin:12px 0}
+#w28LogoPreview{width:64px!important;height:64px!important;min-width:64px;object-fit:contain;border-radius:15px!important;padding:8px!important}
+#w28LogoPreview svg{width:32px!important;height:32px!important}
+#w28Settings .w28-logo-box>div>button{font-size:13px!important;padding:9px 14px!important;min-height:40px!important}
+#w28Settings .w28-logo-box .w28-toggle{margin-top:10px;gap:12px}
+#w28Settings .w28-logo-box .w28-toggle>span{font-size:13px!important}
+.w29-account-tools{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.w29-account-tools button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:14px;font-size:13px}.w29-account-tools svg{width:21px;height:21px}
+.w29-accounts{display:grid;gap:12px}.w29-account{display:flex;align-items:center;gap:14px;border:1px solid #dce5f0;border-radius:18px;padding:18px;background:white}.w29-account>span{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#eaf0fd;color:#2864e9}.w29-account svg{width:23px;height:23px}.w29-account>div{flex:1;min-width:0}.w29-account small,.w29-account strong{display:block;margin-top:6px}.w29-account small{color:#7b8798;font-size:11px}.w29-account strong{color:#2864e9}.w29-account>button{padding:8px;border-radius:12px}.w29-account-form{max-width:640px}.w29-transfer{gap:18px}
+@keyframes w29Appear{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+#content :is(.panel,.stat,.more-group,.w28-section,.w25-product-card,.w25-party-card,.w25-product,.w25-party,.card,.w28-payment-card,.native-chart),.w29-account{animation:w29Appear .48s cubic-bezier(.2,.7,.3,1) backwards}
+#content :is(.panel,.stat,.more-group,.w28-section):nth-child(2){animation-delay:.04s}#content :is(.panel,.stat,.more-group,.w28-section):nth-child(3){animation-delay:.08s}
+#modalBody{animation:w29Appear .35s ease backwards}button,a,input,.select-trigger{transition:background-color .2s,color .2s,box-shadow .2s,scale .16s}button:active,#bottomNav a:active{scale:.97}.choice-dropdown,#w25Menu{animation:w29Appear .2s ease backwards}
+@media(min-width:1024px){#payments .payment-row{max-width:720px!important;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 100px 110px 32px!important}#payments .payment-row input,#payments .payment-row .select-trigger{font-size:13px!important}.w29-accounts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{*,*::before,*::after{animation:none!important;transition:none!important}}
+#payments .payment-row>select.android-native-select{display:none!important}
+#payments .payment-row [data-p=account]+.select-trigger,#payments .payment-row [data-p=currency]+.select-trigger,#payments .payment-row [data-p=rate],#payments .payment-row [data-p=amount]{grid-column:auto!important;grid-row:auto!important}

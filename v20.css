@@ -1,0 +1,113 @@
+/* Rawan ERP 2.0 mobile finish - balanced header, centred cashier, clean action cards */
+:root{--r20-blue:#2864e9;--r20-edge:#e2e8f1}
+html,body{max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
+#content{min-width:0;max-width:100%;overflow-x:clip}
+/* Protect header from wrapping, collapsed button width, horizontal viewport drift. */
+header,.header-tools{transform:none!important;contain:layout style}
+header{height:77px!important;min-height:77px!important}
+header .header-tools{width:100%;flex-wrap:nowrap!important;gap:10px!important;align-items:center;justify-content:space-between;overflow:visible!important}
+.header-tools .top-brand{min-width:0;max-width:100%!important;flex:1 1 auto!important;gap:9px!important}
+.header-tools .top-brand b{font-size:clamp(13px,3.5vw,17px);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.header-tools .company-symbol{border-radius:13px;flex-shrink:0}
+.header-tools #storageState,.header-tools #themeBtn,.header-tools #typographyBtn,.header-tools #languageBtn{flex:0 0 40px!important;width:40px!important;height:42px!important;min-width:40px;display:grid;place-items:center}
+.header-tools #profileBtn,.header-tools #headerMore{flex-shrink:0}
+.header-tools .icon-btn{display:grid;place-items:center}
+body.v19-pos-route #content{width:100%!important;max-width:760px!important;margin-inline:auto!important;left:auto!important;right:auto!important;float:none!important}
+body.v19-pos-route .v19-cashier-header,body.v19-pos-route .cashier-tabs,body.v19-pos-route .pos{width:100%;max-width:100%;margin-inline:auto!important;box-sizing:border-box}
+body.v19-pos-route .pos{display:flex!important;flex-direction:column!important;align-items:stretch!important;direction:rtl!important;gap:0!important}
+body.v19-pos-route .pos>.panel,body.v19-pos-route .pos>.catalog-panel{width:100%!important;min-width:0!important;max-width:100%!important;flex:0 0 auto}
+body.v19-pos-route .v19-cashier-header{grid-template-columns:58px minmax(0,1fr) 58px;padding-inline:15px}
+body.v19-pos-route .v19-employee-badge{max-width:100%;min-width:0;text-align:center;justify-content:center}
+body.v19-pos-route .v19-employee-badge b{min-width:0;overflow:hidden;text-overflow:ellipsis}
+body.v19-pos-route .catalog-panel>.toolbar{max-width:100%;min-width:0}
+body.v19-pos-route .pos-search{max-width:100%;min-width:0}
+body.v19-pos-route .cart-list,body.v19-pos-route .cart-controls{max-width:100%}
+body.v19-pos-route .cart-controls{grid-template-columns:minmax(80px,1fr) minmax(48px,65px) minmax(55px,70px) minmax(45px,65px)!important}
+body.v19-pos-route .cart-controls>*{min-width:0}
+body.v19-pos-route .pos>.review-panel,body.v19-pos-route .pos>.cart{margin:14px auto!important;width:calc(100% - 28px)!important}
+/* Tidy standalone filter button. Search by name stays in the filter sheet; POS keeps its barcode search. */
+.toolbar .r20-filter-btn{width:47px;height:46px;flex:0 0 47px;padding:9px;border:1px solid #d8e3f4;border-radius:15px;background:#ecf3ff;color:var(--r20-blue);display:inline-grid!important;place-items:center;box-shadow:none!important}
+.toolbar .r20-filter-btn svg{display:block;width:25px;height:25px}
+.r20-filter-fields{margin-top:4px}
+.r20-filter-fields label{min-width:0}
+.r20-reset-filter{margin-top:18px;padding:12px 16px;color:#6a7588;background:#f3f5f9}
+/* Rectangular inset cards on every overview/financial menu, with themed icon tile */
+#content .report-grid,#content .quick-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;padding-block:12px!important;align-items:stretch!important}
+#content .report-grid>.r20-action-card,#content .quick-grid>.r20-action-card{min-height:116px!important;padding:17px 8px!important;margin:0!important;width:100%!important;min-width:0;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:12px!important;border:1px solid #e4e9f2!important;border-radius:19px!important;background:var(--panel)!important;color:var(--text)!important;box-shadow:0 5px 15px #2238550b!important;text-align:center!important;font-size:13px!important;font-weight:650!important;line-height:1.6!important;white-space:normal!important}
+#content .r20-action-card svg{width:27px!important;height:27px!important;color:#2864e9!important;background:#e9f1ff;border-radius:13px;padding:10px;box-sizing:content-box}
+#content .r20-action-card:nth-child(6n+2) svg{background:#e6f8f5;color:#129c97!important}
+#content .r20-action-card:nth-child(6n+3) svg{background:#fff0db;color:#ea962b!important}
+#content .r20-action-card:nth-child(6n+4) svg{background:#fce6ee;color:#e56b91!important}
+#content .r20-action-card:nth-child(6n+5) svg{background:#ebebff;color:#7278cf!important}
+#content .r20-action-card:nth-child(6n+6) svg{background:#e8f7e7;color:#48a66d!important}
+#content .r20-action-card:active{transform:scale(.985);transition:transform 90ms}
+/* Reports and record cards on all overview pages remain in a consistent visual system. */
+#content .stat,#content .document-card,#content .product-list-card{border-radius:20px!important;border:1px solid var(--r20-edge)!important;box-shadow:0 5px 16px #22385509!important}
+#content .stat strong{width:100%;display:block!important;text-align:center!important;direction:ltr;align-self:center!important}
+#content .stat .stat-top{align-items:center!important;text-align:center!important}
+#content .stat .stat-icon{margin-inline:auto!important}
+/* Move product item three-dots to geometric middle, preserve clickable surface. */
+.product-list-card{position:relative;padding-bottom:52px!important}
+.product-list-card>.dots-btn{position:absolute!important;top:auto!important;right:auto!important;left:50%!important;bottom:9px!important;transform:translateX(-50%)!important;width:45px!important;height:36px!important;margin:0!important;border:1px solid #e0e7f2!important;border-radius:12px!important;background:#f3f6fc!important;color:#425670!important;display:grid!important;place-items:center!important;z-index:2}
+.product-list-card>.dots-btn svg{height:21px;width:21px}
+/* Variants created and saved in same transaction as their parent */
+.r20-variant-editor{border:1px solid #dce6f4;background:#f9fbfe;border-radius:19px;padding:18px;margin:20px 0}
+.r20-variant-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.r20-variant-head h3{font-size:17px;color:#25374e}
+.r20-variant-head p{font-size:12px;color:#6d7b8c;max-width:450px;margin:5px 0}
+.r20-variant-head button{background:#e3edff;border:1px solid #bdd3ff;color:#2864e9;border-radius:12px;font-weight:700;white-space:nowrap}
+.r20-variant-row{border:1px solid #e1e8f1;background:#fff;border-radius:14px;padding:15px;margin-top:12px;position:relative}
+.r20-variant-row .form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.r20-remove-variant{position:absolute;left:11px;top:8px;border:0;background:#ffebed;color:#c52c49;font-size:22px;width:34px;height:34px;padding:0;z-index:2}
+.r20-existing-variants{font-size:12px;line-height:2;color:#58677e}
+.r20-existing-variants span{display:inline-flex;border-radius:12px;padding:3px 8px;background:#eaf0f9;margin:4px}
+.r20-shift-opening .form-grid{gap:13px}
+.r20-ledger-hint,.r20-opening-audit{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;margin-top:12px;border-radius:12px;background:#f0f5fe;gap:14px}
+.r20-ledger-hint b,.r20-opening-audit b{font-variant-numeric:tabular-nums;direction:ltr;color:#296de0}
+.r20-shift-opening>p{color:#67768c;font-size:12px;line-height:1.8}
+.r20-opening-audit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;margin:12px 0}
+.r20-opening-audit span{font-size:12px}
+.r20-shift-owner{grid-column:1/-1;color:#607591;font-size:12px}
+/* Switch the app to real LTR layout when English selected; numbers stay LTR regardless. */
+html[dir="ltr"] body,html[dir="ltr"] #content,html[dir="ltr"] main,html[dir="ltr"] #modalBody,html[dir="ltr"] .panel,html[dir="ltr"] .document-grid,html[dir="ltr"] .more-links,html[dir="ltr"] .toolbar{direction:ltr!important;text-align:left}
+html[dir="ltr"] .v19-report-shell,html[dir="ltr"] .v19-report-body,html[dir="ltr"] .v19-white-panel,html[dir="ltr"] .v19-stock-card,html[dir="ltr"] .v19-report-row,html[dir="ltr"] .v19-employee-badge,html[dir="ltr"] .v19-cashier-menu,html[dir="ltr"] #bottomNav{direction:ltr!important}
+html[dir="ltr"] .v19-pagebar{direction:rtl!important}
+html[dir="ltr"] .v19-pagebar h1{direction:ltr!important}
+html[dir="ltr"] .v19-report-row .v19-row-name{direction:ltr;text-align:left}
+html[dir="ltr"] .v19-cashier-header{direction:rtl}
+html[dir="ltr"] .v19-stock-name,html[dir="ltr"] .v19-stock-line span{text-align:left}
+html[dir="ltr"] .v19-cashier-menu button,html[dir="ltr"] .more-links a,html[dir="ltr"] .more-links button{direction:ltr!important;text-align:left!important}
+html[dir="ltr"] .menu-accordion .more-summary{direction:ltr!important}
+html[dir="ltr"] #modalBody label{direction:ltr;text-align:left}
+html[dir="ltr"] input,html[dir="ltr"] select,html[dir="ltr"] textarea{direction:ltr;text-align:left}
+html[dir="ltr"] table{text-align:left}
+html[dir="ltr"] .product-detail,html[dir="ltr"] .cart,html[dir="ltr"] .product-list-card{text-align:left}
+html[dir="ltr"] body.v19-pos-route .pos{direction:ltr!important}
+html[dir="ltr"] .v18-accordion .more-summary{direction:ltr}
+html[dir="ltr"] .v18-accordion .more-summary>b{text-align:left}
+html[dir="ltr"] .r20-variant-head,html[dir="ltr"] .r20-shift-opening,html[dir="ltr"] .r20-variant-editor{text-align:left}
+@media(max-width:900px){
+ header{height:76px!important;min-height:76px!important;padding:7px 11px!important}
+ .header-tools{gap:6px!important}
+ .header-tools #storageState,.header-tools #themeBtn,.header-tools #typographyBtn,.header-tools #languageBtn{flex-basis:39px!important;width:39px!important;min-width:39px!important;height:40px!important;padding:7px!important}
+ .header-tools #profileBtn{display:none!important}
+ .header-tools .company-symbol{flex-basis:38px!important;width:38px!important;height:40px!important}
+ .header-tools .top-brand{gap:6px!important}
+ .header-tools .top-brand b{font-size:clamp(13px,3.4vw,17px)!important}
+ .r20-filter-fields{grid-template-columns:1fr 1fr}
+}
+@media(max-width:370px){
+ .header-tools{gap:3px!important}
+ .header-tools #storageState,.header-tools #themeBtn,.header-tools #typographyBtn,.header-tools #languageBtn{flex-basis:34px!important;width:34px!important;min-width:34px!important;height:38px!important;padding:5px!important}
+ .header-tools .company-symbol{width:31px!important;flex-basis:31px!important}
+ .header-tools .top-brand b{font-size:12px!important}
+ .r20-variant-row .form-grid,.r20-filter-fields{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){#content .r20-action-card{transition:none!important}}
+
+/* Arabic cashier: three-dots on left and Back on right; English mirrors it. */
+html[dir="rtl"] .v19-cashier-header{direction:ltr!important}
+html[dir="ltr"] .v19-cashier-header{direction:rtl!important}
+html[dir="ltr"] .v19-pagebar>a svg,html[dir="ltr"] .v19-cashier-header>a svg{transform:rotate(180deg)}
+html[dir="rtl"] .v19-employee-badge{direction:rtl}
+html[dir="ltr"] .v19-employee-badge{direction:ltr}

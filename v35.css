@@ -1,0 +1,47 @@
+/* WATHEQ 3.5 — integrated checkout, warranty and print polish. */
+.pos .review-panel,.pos .cart{min-width:0;box-sizing:border-box}
+.pos .review-panel #w34InlinePay,.pos .cart #w34InlinePay{position:static!important;display:block;width:100%;box-sizing:border-box;margin:14px 0 12px;order:0;overflow:visible}
+#w34InlinePay .w35-payment-title{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;margin:6px 0 12px;color:#27384f}
+#w34InlinePay .w35-payment-title b{font-size:15px}#w34InlinePay .w35-payment-title small{font-size:12px;color:#64748b}
+.w35-split-row{border:1px solid #d8e3f2;background:#f9fbff;border-radius:17px;margin:0 0 12px;padding:13px}
+.w35-split-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:#2b466c;font-size:13px}
+.w35-remove-split{width:34px!important;height:34px!important;min-width:34px!important;padding:0!important;border:1px solid #e8d1d1!important;border-radius:11px!important;color:#b94b4b!important;background:#fff!important}
+.w35-split-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.w35-split-grid label:nth-child(3){grid-column:1/-1}
+#w34InlinePay label{min-width:0;max-width:100%;margin:0;box-sizing:border-box}
+#w34InlinePay input,#w34InlinePay select{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+.w35-add-split{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px!important;padding:12px!important;border:1px dashed #8eb0ef!important;background:#f1f6ff!important;border-radius:14px!important;color:#235fc9!important;font-weight:700}
+.w35-payment-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 0;padding:12px;background:#eaf2ff;border-radius:13px}
+.w35-payment-summary span{display:flex;flex-direction:column;gap:3px;font-size:11px;color:#5c6b82}
+.w35-payment-summary b{font-size:13px;white-space:normal;color:#1f3f7d}
+.w35-overpaid b{color:#b91c1c!important}
+.w35-pay-standard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.w35-date-filters{padding:14px;border-radius:15px;border:1px solid #d7e5f9;background:#f6f9ff;margin:0 0 16px}
+.w35-date-filters>b{font-size:14px;color:#23456d;display:block;margin:0 0 10px}
+.w35-periods{display:flex;flex-wrap:wrap;gap:7px;direction:rtl}
+.w35-periods button{min-height:39px!important;padding:8px 12px!important;background:white;border:1px solid #d8e3f1!important;border-radius:11px!important;color:#2e5b96;font-size:12px;white-space:normal}
+.w35-periods button.active{background:#2864e9!important;color:#fff!important;border-color:#2864e9!important}
+.w35-date-missing{margin:12px 0 0}
+.w35-warranty-shortcut{display:flex;justify-content:flex-start;gap:12px;margin-bottom:12px}
+.w35-warranty-shortcut button{display:flex;align-items:center;gap:8px}.w35-warranty-open{margin-bottom:16px}
+.w35-warranty-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 15px}
+.w35-warranty-stats>div{border:1px solid #dce5ef;border-radius:14px;padding:15px;background:#f7faff;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.w35-warranty-stats span{color:#566681;font-size:13px}.w35-warranty-stats strong{color:#2563eb;font-size:24px}
+.w35-warranty-toolbar{display:flex;flex-wrap:wrap;align-items:end;gap:14px;margin-bottom:20px}.w35-warranty-toolbar>label:first-child{flex:1;min-width:220px}.w35-warranty-toolbar input[type=search]{width:100%}
+.w35-expired-switch{display:flex;align-items:center;gap:8px}.w35-expired-switch input{width:18px;height:18px}
+.w35-warranty-list{display:grid;gap:12px}.w35-warranty-card{background:#fff;border:1px solid #e0e7f0;border-radius:16px;padding:17px}
+.w35-warranty-header{display:flex;justify-content:space-between;gap:12px;align-items:center}.w35-warranty-header>div{display:flex;flex-direction:column;gap:5px}.w35-warranty-header b{font-size:16px;color:#243954}.w35-warranty-header small{color:#6a788d}
+.w35-warranty-header>span{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700}.w35-warranty-header>span.active{color:#166534;background:#dcfce7}.w35-warranty-header>span.expired{color:#8c4141;background:#fee2e2}
+.w35-warranty-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:17px 0}.w35-warranty-meta>div{display:flex;flex-direction:column;gap:4px}.w35-warranty-meta small{color:#728095}.w35-warranty-meta strong{font-size:13px;color:#314361}
+.w35-employees-access{background:#eef4ff!important;color:#2365d8!important;border-radius:13px!important;border-color:#d0dff9!important}
+.w35-receipt-hint{grid-column:1/-1;background:#edf6ff;border:1px solid #c8ddfd;border-radius:14px;padding:15px;margin:10px 0;font-size:13px}.w35-receipt-hint p{color:#435c7b;margin:6px 0}.w35-receipt-hint #w35CustomerDebt{font-weight:700}
+.w35-attachment-uploader{background:transparent;padding:0!important}.w35-attachment-uploader h3{margin-bottom:10px}.w35-attach-picker{display:flex!important;gap:13px;align-items:center;justify-content:space-between;background:#f4f7fc;border:1.5px dashed #b8cbea;border-radius:17px;padding:18px!important;cursor:pointer;color:#2864e9!important;width:100%;box-sizing:border-box}
+.w35-attach-picker>span:nth-child(2){display:flex;flex-direction:column;gap:5px;flex:1}.w35-attach-picker b{font-size:15px}.w35-attach-picker small{color:#70839d;font-size:12px}.w35-attach-icon{width:52px;height:52px;background:#e3edfd;display:grid;place-items:center;border-radius:14px}.w35-attach-icon svg{width:28px;height:28px}.w35-attach-plus{font-size:26px}.w35-attach-picker input{position:absolute;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none}
+#w34AttachmentPreview{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.w35-attachment-tile{position:relative;display:inline-block}.w35-attachment-tile img{margin:0!important;width:96px;height:96px;object-fit:cover;border-radius:13px;border:1px solid #dfe8f3}.w35-attachment-tile button{position:absolute;top:-6px;inset-inline-end:-5px;background:#fff;color:#b91c1c;border:1px solid #eee;border-radius:100%;width:26px;height:26px;padding:0}
+.w35-print-credit{text-align:left!important;direction:ltr!important;font-size:12pt!important;font-weight:700!important;color:#000;line-height:1.45;margin-top:15px;border-top:1px dashed #999;padding-top:8px}
+@media(max-width:740px){.w35-payment-summary{grid-template-columns:1fr}.w35-payment-summary span{flex-direction:row;justify-content:space-between}.w35-pay-standard{grid-template-columns:repeat(2,minmax(0,1fr))}.pos .review-panel{padding-bottom:110px!important}.w35-split-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.w35-split-row{padding:12px 10px}}
+@media(max-width:390px){.w35-split-grid,.w35-pay-standard{grid-template-columns:1fr}.w35-split-grid label:nth-child(3){grid-column:auto}}
+@media print{.receipt,.w28-receipt,.receipt *,.w28-receipt *{font-family:Cairo,Arial,sans-serif!important}.receipt,.w28-receipt{font-size:13pt!important;line-height:1.5!important;color:#000!important}.receipt td,.receipt th{font-size:11.5pt!important;line-height:1.4!important;color:#000!important}.receipt h1{font-size:20pt!important}.receipt h2{font-size:15pt!important}.receipt .w35-print-credit{font-size:11.5pt!important}.w28-thermal img{width:100%!important;height:auto!important;image-rendering:auto!important}}
+
+/* Scanner only belongs to the product pane, not above payment form fields. */
+body.w35-review-open .w26-scan{display:none!important}

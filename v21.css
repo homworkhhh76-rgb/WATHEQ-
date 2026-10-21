@@ -1,0 +1,60 @@
+/* Rawan ERP 2.1 — no dark theme, clean toolbar, correct alignment, smooth cards */
+:root{color-scheme:light}
+#themeBtn{display:none!important}
+body{color-scheme:light}
+/* Restore the original position of the product action; center only the glyph in its gray surface. */
+.product-list-card{position:relative;padding-bottom:20px!important}
+.product-list-card>.dots-btn{
+ position:static!important;inset:auto!important;left:auto!important;right:auto!important;
+ top:auto!important;bottom:auto!important;transform:none!important;
+ flex:0 0 40px!important;width:40px!important;height:42px!important;
+ padding:0!important;margin:0!important;border:0!important;border-radius:12px!important;
+ background:#e9eef5!important;color:#506078!important;
+ display:grid!important;place-items:center!important;align-content:center!important;justify-content:center!important;
+}
+.product-list-card>.dots-btn svg{width:20px!important;height:20px!important;display:block!important;margin:auto!important;transform:rotate(90deg);transform-origin:center}
+/* The real filter is one SVG control, not a search field occupying a whole row. */
+.toolbar button[data-action="filter"],.page-head button[data-action="filter"]{
+ flex:0 0 46px!important;min-width:46px!important;min-height:44px!important;
+ display:inline-grid!important;place-items:center!important;padding:9px!important;
+ border:1px solid #dae5f5!important;border-radius:13px!important;
+ background:#edf4ff!important;color:#2864e9!important;
+}
+.toolbar button[data-action="filter"] svg,.page-head button[data-action="filter"] svg{width:23px;height:23px}
+/* Neutral accessible focus styling and stable sizing across the app. */
+#content .report-grid>* ,#content .quick-grid>*{min-width:0}
+#content .report-grid button,#content .quick-grid button{contain:layout style;will-change:auto}
+#content.r21-enter .report-grid > *,
+#content.r21-enter .quick-grid > *,
+#content.r21-enter .stat,
+#content.r21-enter .document-card,
+#content.r21-enter .product-list-card,
+#content.r21-enter .native-chart,
+#content.r21-enter .more-group{animation:r21CardIn .34s cubic-bezier(.18,.8,.18,1) both}
+#content.r21-enter .report-grid > :nth-child(2n),
+#content.r21-enter .quick-grid > :nth-child(2n),
+#content.r21-enter .document-card:nth-child(2n){animation-delay:35ms}
+#content.r21-enter .report-grid > :nth-child(3n),
+#content.r21-enter .quick-grid > :nth-child(3n){animation-delay:55ms}
+@keyframes r21CardIn{0%{opacity:0;transform:translate3d(0,12px,0) scale(.99)}100%{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+/* No movement on state updates while editing forms/scrolling, only on page entry. */
+#content:not(.r21-enter) .report-grid>* ,#content:not(.r21-enter) .quick-grid>*{animation:none!important}
+.r20-variant-editor{scroll-margin-top:15px}
+.r20-variant-editor h3{margin:0}
+.r20-variant-row:focus-within{border-color:#84aafb;box-shadow:0 0 0 3px #2d74ec12}
+.r20-variant-row[data-variant-id]:before{content:'متغير محفوظ';display:block;color:#2d6bdc;font-size:11px;margin-bottom:6px}
+/* Keep the header on one line, without the eliminated theme item. */
+header,.header-tools{max-width:100%!important}
+.header-tools{min-width:0!important;overflow:hidden!important;flex-wrap:nowrap!important;gap:clamp(4px,1.5vw,12px)!important}
+.header-tools .top-brand{min-width:0!important;flex:1 1 auto!important}
+.header-tools .top-brand b{min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:600px){
+ header{padding-inline:9px!important}
+ .header-tools #storageState,.header-tools #typographyBtn,.header-tools #languageBtn{width:39px!important;flex-basis:39px!important;min-width:39px!important}
+ .r20-variant-row .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:375px){.r20-variant-row .form-grid{grid-template-columns:1fr}}
+html[dir="ltr"] #content .document-card,html[dir="ltr"] #content .product-list-card,html[dir="ltr"] .report-grid,html[dir="ltr"] .quick-grid{direction:ltr!important}
+html[dir="ltr"] #content .page-head,html[dir="ltr"] #content .stat{text-align:left!important}
+html[dir="ltr"] .product-list-card>.dots-btn{margin-inline-start:0!important}
+@media(prefers-reduced-motion:reduce){#content.r21-enter :is(.report-grid>*,.quick-grid>*,.stat,.document-card,.product-list-card,.native-chart,.more-group){animation:none!important}}
