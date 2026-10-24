@@ -1,0 +1,63 @@
+/* Watheeq v4.9 — exact dashboard composition from the user-supplied HTML.
+   Styles are desktop-only, avoiding impact on the mobile application. */
+@font-face{font-family:W49Cairo;src:url('./cairo.ttf') format('truetype');font-style:normal;font-weight:400 900;font-display:swap}
+@media(min-width:1024px){
+  body.w48-desktop #content:has(>.w49-dashboard){background:#f3f6fc!important;max-width:none!important;width:100%!important;padding:0!important;min-height:calc(100dvh - 64px)!important;overflow:visible!important}
+  body.w48-desktop #content>.w49-dashboard{font-family:W49Cairo,Cairo,sans-serif!important;color:#1e293b;background:#f3f6fc;min-height:calc(100dvh - 64px);width:100%;line-height:1.5;font-size:14px;overflow:hidden}
+  .w49-dashboard *{box-sizing:border-box}
+  .w49-dashboard svg{flex-shrink:0;display:inline-block;vertical-align:middle;max-width:100%}
+  .w49-dashboard svg.w-4{width:16px!important;height:16px!important}
+  .w49-dashboard svg.w-5{width:20px!important;height:20px!important}
+  .w49-dashboard svg.w-6{width:24px!important;height:24px!important}
+  .w49-dashboard .w49-filter-bar button{white-space:nowrap}
+  .w49-dashboard .w49-filter-bar button span{white-space:nowrap}
+  .w49-dashboard .w49-chart-card .w49-featured svg{width:20px!important;height:20px!important}
+  .w49-dashboard .w49-sidebar h3 svg{width:16px!important;height:16px!important}
+  .w49-dashboard .card-shadow{box-shadow:0 4px 20px -2px rgba(0,0,0,.05)!important;transition:box-shadow .25s ease-in-out,transform .25s ease-in-out!important}
+  .w49-dashboard .card-shadow:hover{box-shadow:0 10px 25px -3px rgba(0,0,0,.08)!important;transform:translateY(-2px)}
+  .w49-dashboard .w49-main-layout{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;column-gap:24px!important;row-gap:24px!important;align-items:start;max-width:1600px;margin-inline:auto!important;padding:24px!important}
+  .w49-dashboard .w49-sidebar{grid-column:span 2/span 2!important;min-width:0}
+  .w49-dashboard .w49-center{grid-column:span 10/span 10!important;min-width:0}
+  .w49-dashboard .w49-center>*+*{margin-top:24px}
+  .w49-dashboard .w49-quick-list>*+*{margin-top:8px}
+  .w49-dashboard .w49-quick-button{min-height:56px;display:flex!important;cursor:pointer;text-align:right;white-space:normal;text-decoration:none!important;background:white;border:1px solid #f1f5f9;box-shadow:none!important;font-family:inherit;font-size:12px;line-height:1.4;gap:12px;width:100%}
+  .w49-dashboard .w49-quick-button:hover{background:#eff6ff;border-color:#bfdbfe}
+  .w49-dashboard .w49-quick-button svg{width:20px;height:20px}
+  .w49-dashboard .w49-filter-bar{width:100%;}
+  .w49-dashboard .w49-filter-bar .w49-filter-row{max-width:1600px;padding-inline:0}
+  .w49-dashboard .w49-filter-bar button{cursor:pointer;font-family:inherit;line-height:1.5;min-height:34px}
+  .w49-dashboard .w49-filter-bar button:hover{background:#e2e8f0}
+  .w49-dashboard .w49-metrics{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important}
+  .w49-dashboard .w49-metric{min-height:126px}
+  .w49-dashboard .w49-charts{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px!important}
+  .w49-dashboard .w49-profits{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+  .w49-dashboard .w49-chart-card{min-width:0}
+  .w49-dashboard .w49-featured{background:linear-gradient(to left,#2563eb,#4f46e5);color:#fff}
+  .w49-dashboard .w49-chart-card:nth-child(2) .w49-featured{background:linear-gradient(to left,#9333ea,#7c3aed)}
+  .w49-dashboard .w49-chart-card h4{margin:0;font-size:14px!important;line-height:1.5;font-weight:800;color:#fff}
+  .w49-dashboard .w49-chart-card p{margin:0;font-size:11px;color:#dbeafe}
+  .w49-dashboard .w49-chart-card .w49-featured .w49-chart-stats{margin-top:6px}
+  .w49-dashboard .w49-chart-stats .text-base{font-size:16px!important}
+  .w49-dashboard .w49-canvas-wrap{position:relative;width:100%;height:192px;min-height:192px;display:block}
+  .w49-dashboard .w49-canvas-wrap canvas{display:block;width:100%;height:192px;max-width:100%}
+  .w49-dashboard .w49-chart-tooltip{position:absolute;display:none;pointer-events:none;z-index:5;border-radius:6px;background:rgba(15,23,42,.9);color:white;white-space:nowrap;padding:5px 7px;font:700 10px Cairo,sans-serif}
+  .w49-dashboard .w49-metric .text-2xl,.w49-dashboard .w49-profit .text-2xl{font-size:24px!important;line-height:1.35}
+  .w49-dashboard .w49-profit{min-height:90px}
+  .w49-dashboard .w49-live-dot{animation:w49pulse 2s infinite}
+  @keyframes w49pulse{50%{opacity:.4}}
+  .w49-dashboard ::-webkit-scrollbar{width:6px;height:6px}
+  .w49-dashboard ::-webkit-scrollbar-track{background:#f1f5f9}
+  .w49-dashboard ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+  .w49-dashboard ::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+}
+@media(min-width:1024px) and (max-width:1199px){
+  .w49-dashboard .w49-main-layout{grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:16px!important;padding:16px!important}
+  .w49-dashboard .w49-metrics{gap:12px!important}
+  .w49-dashboard .w49-charts{gap:16px!important}
+  .w49-dashboard .w49-sidebar{grid-column:span 3/span 3!important}
+  .w49-dashboard .w49-center{grid-column:span 9/span 9!important}
+  .w49-dashboard .w49-quick-button{font-size:11px}
+  .w49-dashboard .w49-metric .text-2xl,.w49-dashboard .w49-profit .text-2xl{font-size:19px!important}
+}
+@media(max-width:1023px){.w49-dashboard{display:none!important}}
+@media(prefers-reduced-motion:reduce){.w49-dashboard .card-shadow,.w49-dashboard .card-shadow:hover{transition:none!important;transform:none!important}.w49-dashboard .w49-live-dot{animation:none}}

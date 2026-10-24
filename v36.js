@@ -154,19 +154,37 @@
  function topNav(){
   let main=document.querySelector('main > header');if(!main)return;
   if(!$('#w36Nav')){
-   const brand=document.createElement('a');brand.id='w36Brand';brand.href='#dashboard';brand.innerHTML=`<span>و</span><b>الوثيق</b>`;
+   const brand=document.createElement('a');brand.id='w36Brand';brand.href='#dashboard';brand.innerHTML=`<img src="./icon.svg" width="28" height="28" alt="شعار الوثيق"><b>الوثيق</b>`;
    const title=document.createElement('b');title.id='w36HeaderTitle';
    const navBar=document.createElement('nav');navBar.id='w36Nav';navBar.setAttribute('aria-label','التنقل الرئيسي');
    main.prepend(brand,title,navBar);
   }
   const pageLabel=nav.find(([k])=>k===route)?.[1]||document.querySelector('#crumb')?.textContent||'الرئيسية';
-  $('#w36HeaderTitle').textContent=route==='pos'?'الكاشير':pageLabel;
+  const titleLabel=route==='pos'?'الكاشير':pageLabel;
+  if($('#w36HeaderTitle').textContent!==titleLabel)$('#w36HeaderTitle').textContent=titleLabel;
   const assigned=new Set();
-  $('#w36Nav').innerHTML=navGroups.map(([label,ico,keys],index)=>{
+  // v4.5: Never rebuild the dropdown DOM on a cart/save/sync render.
+  // Rebuilding during a pointer click was resetting the open state and causing flicker.
+  const navRoot=$('#w36Nav');
+  const navHtml=navGroups.map(([label,ico,keys],index)=>{
    const pages=keys.map(k=>nav.find(x=>x[0]===k)).filter(p=>p&&accessible(p[0])&&!assigned.has(p[0]));pages.forEach(p=>assigned.add(p[0]));
    if(!pages.length)return '';
-   return `<div class="w36-menu ${pages.some(p=>p[0]===route)?'w36-menu-current':''}"><button type="button" class="w36-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="w36-menu-${index}">${saleIcon(ico)}<span>${label}</span><svg class="w36-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="w36-dropdown" id="w36-menu-${index}" role="menu">${pages.map(([k,name])=>`<a role="menuitem" href="#${esc(k)}" class="${k===route?'active':''}">${icon(k)}<span>${esc(name)}</span></a>`).join('')}</div></div>`;
+   return `<div class="w36-menu"><button type="button" class="w36-menu-trigger" aria-haspopup="true" aria-expanded="false" aria-controls="w36-menu-${index}">${saleIcon(ico)}<span>${label}</span><svg class="w36-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="w36-dropdown" id="w36-menu-${index}" role="menu">${pages.map(([k,name])=>`<a role="menuitem" href="#${esc(k)}">${icon(k)}<span>${esc(name)}</span></a>`).join('')}</div></div>`;
   }).join('');
+  // Permission changes legitimately rebuild once; simple navigation only updates classes.
+  const signature=navHtml.replace(/class="w36-menu"/g,'').replace(/class="w36-menu-trigger"/g,'');
+  if(navRoot.dataset.structure!==signature){
+   navRoot.innerHTML=navHtml;
+   navRoot.dataset.structure=signature;
+  }
+  navRoot.querySelectorAll('.w36-menu').forEach(menu=>{
+   let current=false;
+   menu.querySelectorAll('.w36-dropdown a').forEach(link=>{
+    const selected=link.getAttribute('href')==='#'+route;
+    link.classList.toggle('active',selected);if(selected)current=true;
+   });
+   menu.classList.toggle('w36-menu-current',current);
+  });
  }
  document.addEventListener('click',e=>{
   const trigger=e.target.closest?.('.w36-menu-trigger');

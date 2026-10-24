@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <script>if(window.parent!==window)document.documentElement.classList.add('w45-embedded');</script>
+    <style>html.w45-embedded .app-header{display:none!important}html.w45-embedded body{height:100dvh!important;min-height:0!important}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام نقطة البيع الذكي POS ERP</title>
+    <style>@font-face{font-family:Cairo;src:url("cairo.ttf") format("truetype");font-display:swap}</style>
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-hover: #1e40af;
+            --primary-light: #eff6ff;
+            --dark-blue: #0f172a;
+            --nav-blue: #1e3a8a;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-btn: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            font-size: 11.5px;
+        }
+
+        /* --- الهيدر العلوي --- */
+        .app-header {
+            background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 3px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 38px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .brand-badge {
+            background: #2563eb;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        .header-info-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .invoice-type-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            padding: 1px;
+        }
+
+        .inv-type-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .inv-type-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .select-header {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .select-header option {
+            background: #0f172a;
+            color: white;
+        }
+
+        .inv-num-badge {
+            background: #2563eb;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            font-size: 11px;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 10px;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            background-color: #34d399;
+            border-radius: 50%;
+        }
+
+        .btn-new-inv {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-new-inv:hover { background: #059669; }
+
+        .btn-hold-list {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* --- منطقة بيانات الفاتورة --- */
+        .invoice-meta-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 4px 8px;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .form-group label {
+            font-size: 9.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .form-control {
+            height: 24px;
+            padding: 1px 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 11px;
+            outline: none;
+            width: 100%;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        .input-with-btn {
+            display: flex;
+            gap: 2px;
+        }
+
+        .btn-mini-add {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- جسم التطبيق الرئيسي --- */
+        .app-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            gap: 6px;
+            padding: 6px;
+        }
+
+        /* --- 1. قسم التصنيفات والمنتجات (اليمين) --- */
+        .products-section {
+            flex: 0.85;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px;
+            order: 1;
+        }
+
+        .search-category-header {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .search-box-row {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }
+
+        .categories-scroll::-webkit-scrollbar { height: 3px; }
+        .categories-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        .cat-btn {
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-size: 10.5px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .cat-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .products-grid {
+            flex: 1;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            grid-auto-rows: max-content;
+            gap: 6px;
+            padding-left: 2px;
+        }
+
+        .product-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.1s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 4px;
+            background: #f8fafc;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(15, 23, 42, 0.75);
+            color: #fff;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 8.5px;
+            font-weight: 700;
+        }
+
+        .product-title {
+            font-weight: 700;
+            font-size: 10.5px;
+            line-height: 1.2;
+            margin: 3px 0 1px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 25px;
+        }
+
+        .product-code {
+            font-size: 8.5px;
+            color: var(--text-muted);
+        }
+
+        .product-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2px;
+        }
+
+        .product-price {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 11px;
+        }
+
+        .btn-add-card {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid #bfdbfe;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* --- 2. قسم السلة والدفع (اليسار) --- */
+        .cart-checkout-section {
+            flex: 1.15;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow: hidden;
+            min-width: 0;
+            order: 2;
+        }
+
+        /* جدول السلة */
+        .cart-table-wrapper {
+            flex: 1;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        table.cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        table.cart-table th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 10px;
+            z-index: 2;
+        }
+
+        table.cart-table td {
+            padding: 3px 4px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        table.cart-table tr:nth-child(even) { background-color: #f8fafc; }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1px;
+        }
+
+        .btn-qty {
+            background: #e2e8f0;
+            border: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-qty {
+            width: 32px;
+            height: 18px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .select-unit {
+            padding: 1px 2px;
+            font-size: 10px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-delete-row {
+            color: var(--danger);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        /* طرق الدفع السريعة */
+        .payment-methods-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .payment-tabs {
+            display: flex;
+            gap: 4px;
+        }
+
+        .pay-tab {
+            flex: 1;
+            padding: 4px 2px;
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.15s;
+        }
+
+        .pay-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pay-details-panel {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 4px 6px;
+        }
+
+        .pay-fields-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* شريط الإجماليات السفلي والأزرار */
+        .action-summary-bar {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .totals-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .total-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .total-item .lbl {
+            font-size: 8.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .total-item .val {
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .grand-total-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .grand-total-box .val {
+            font-size: 15px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .action-btns-group {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .btn-action {
+            height: 32px;
+            padding: 0 10px;
+            border-radius: 4px;
+            border: none;
+            font-weight: 700;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.1s;
+        }
+
+        .btn-pay-submit {
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+        }
+
+        .btn-pay-submit:hover { background: var(--primary-hover); }
+
+        .btn-print { background: #334155; color: white; }
+        .btn-hold { background: #f59e0b; color: white; }
+        .btn-clear { background: #e2e8f0; color: #475569; }
+
+        /* --- مودال المعاينة والطباعة --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 8px;
+            width: 320px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .thermal-receipt {
+            font-family: 'Cairo', sans-serif;
+            font-size: 11px;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 6px;
+            margin-bottom: 6px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+        }
+
+        .receipt-divider {
+            border-bottom: 1px dashed #000;
+            margin: 4px 0;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            .thermal-receipt, .thermal-receipt * { visibility: visible; }
+            .thermal-receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 80mm;
+            }
+        }
+    </style>
+<link rel="stylesheet" href="v47-thermal.css"></head>
+<body>
+
+    <!-- 1. الهيدر العلوي المحاسبي -->
+    <header class="app-header">
+        <div class="header-brand"><button type="button" id="watheeq-return" aria-label="رجوع للنظام" onclick="goBackToWatheeq()" style="border:1px solid #ffffff66;background:#ffffff20;color:white;border-radius:4px;padding:3px 7px;font-family:inherit;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>رجوع</button>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            <span>الوثيق | الكاشير</span>
+            <span class="brand-badge">v4.4</span>
+        </div>
+
+        <div class="header-info-group">
+            <div class="invoice-type-toggle">
+                <button class="inv-type-btn active" id="btn-sales" onclick="setInvoiceType('sales')">مبيعات</button>
+                <button class="inv-type-btn" id="btn-return" onclick="setInvoiceType('return')">مرتجع</button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 4px;">
+                <label style="font-size: 10px; color: #cbd5e1;">المستودع:</label>
+                <select class="select-header" id="warehouse-select">
+                    
+                </select>
+            </div>
+
+            <div class="inv-num-badge">فاتورة #: <span id="inv-number-disp">جديدة</span></div>
+            <div style="font-size: 10px; color: #cbd5e1;" id="live-clock">12:00:00 ص</div>
+            <div style="font-size: 10px; color: #cbd5e1;">المستخدم</div>
+
+            <button class="btn-new-inv" onclick="createNewInvoice()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                جديدة
+            </button>
+            <button class="btn-hold-list" onclick="showHoldList()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                المعلّقة (<span id="hold-count">0</span>)
+            </button>
+            <div class="status-pill"><div class="status-dot"></div> متصل</div>
+        </div>
+    </header>
+
+    <!-- 2. منطقة بيانات الفاتورة المدمجة -->
+    <section class="invoice-meta-bar">
+        <div class="form-group">
+            <label>العميل (F4)</label>
+            <div class="input-with-btn">
+                <select class="form-control" id="customer-select">
+                    <option value="cash">عميل نقدي افتراضي (نقدي)</option>
+                    
+                </select>
+                <button class="btn-mini-add">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>عملة البيع</label>
+            <div class="input-with-btn">
+                <select class="form-control" id="currency-select" onchange="updateCurrency()">
+                    <option value="ILS">شيقل (₪)</option>
+                    <option value="USD">دولار ($)</option>
+                    <option value="JOD">دينار (JOD)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>سعر الصرف</label>
+            <input type="number" class="form-control" id="exchange-rate" value="1.00" step="0.01" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>مجموعة الأسعار</label>
+            <select class="form-control">
+                <option>سعر التجزئة</option>
+                <option>سعر الجملة</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>خصم الفاتورة</label>
+            <div style="display: flex; gap: 2px;">
+                <input type="number" class="form-control" id="inv-discount" value="0" oninput="renderCart()">
+                <select class="form-control" id="inv-discount-type" style="width: 50px;" onchange="renderCart()">
+                    <option value="val">مبلغ</option>
+                    <option value="pct">%</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>الضريبة (%)</label>
+            <input type="number" class="form-control" id="tax-rate" value="16" oninput="renderCart()">
+        </div>
+    </section>
+
+    <!-- 3. جسم التطبيق الرئيسي -->
+    <main class="app-body">
+
+        <!-- القسم الأيمن: التصنيفات والمنتجات -->
+        <section class="products-section">
+            <div class="search-category-header">
+                <div class="search-box-row">
+                    <input type="text" class="form-control" id="product-search" placeholder="ابحث بالاسم، الكود، أو امسح الباركود (F2)..." oninput="filterProducts()">
+                    <button class="btn-mini-add" title="ماسح الباركود">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><line x1="7" y1="12" x2="17" y2="12"></line></svg>
+                    </button>
+                    <label style="display: flex; align-items: center; gap: 2px; font-size: 10px; white-space: nowrap;">
+                        <input type="checkbox" id="allow-negative"> بيع بالسالب
+                    </label>
+                </div>
+
+                <div class="categories-scroll" id="categories-container">
+                    <!-- تصنيفات تتولد برمجياً -->
+                </div>
+            </div>
+
+            <div class="products-grid" id="products-grid">
+                <!-- بطاقات المنتجات تتولد برمجياً -->
+            </div>
+
+            <div style="font-size: 9.5px; color: var(--text-muted); text-align: center;">
+                إجمالي المنتجات المعروضة: <span id="prod-count-disp">0</span>
+            </div>
+        </section>
+
+        <!-- القسم الأيسر: السلة والدفع والتحكم -->
+        <section class="cart-checkout-section">
+            
+            <!-- جدول السلة -->
+            <div class="cart-table-wrapper">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 20px;">#</th>
+                            <th style="width: 32px;">صورة</th>
+                            <th style="text-align: right;">الصنف</th>
+                            <th style="width: 65px;">الوحدة</th>
+                            <th style="width: 75px;">الكمية</th>
+                            <th style="width: 65px;">سعر الوحدة</th>
+                            <th style="width: 50px;">الخصم</th>
+                            <th style="width: 65px;">الإجمالي</th>
+                            <th style="width: 25px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-rows">
+                        <!-- تُضاف العناصر هنا ديناميكياً -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- طرق الدفع السريعة -->
+            <div class="payment-methods-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 700; color: var(--text-muted); font-size: 10px;">طريقة السداد والدفع (F6):</span>
+                </div>
+                <div class="payment-tabs">
+                    <button class="pay-tab active" onclick="switchPayMethod('cash', this)">1. نقدي</button>
+                    <button class="pay-tab" onclick="switchPayMethod('credit', this)">2. آجل</button>
+                    <button class="pay-tab" onclick="switchPayMethod('partial', this)">3. جزئي</button>
+                    <button class="pay-tab" onclick="switchPayMethod('multi', this)">4. متعدد</button>
+                    <button class="pay-tab" onclick="switchPayMethod('installment', this)">5. تقسيط</button>
+                </div>
+
+                <div class="pay-details-panel" id="pay-panel-content">
+                    <!-- محتوى الديناميكي لطريقة الدفع -->
+                </div>
+            </div>
+
+            <!-- شريط الإجماليات والأزرار السفلي -->
+            <div class="action-summary-bar">
+                <div class="totals-inline">
+                    <div class="total-item">
+                        <span class="lbl">الأصناف</span>
+                        <span class="val" id="lbl-count">0</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="lbl">الكميات</span>
+                        <span class="val" id="lbl-qty">0</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="lbl">الخصم الكلي</span>
+                        <span class="val" id="lbl-discount">0.00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="lbl">الضريبة</span>
+                        <span class="val" id="lbl-tax">0.00</span>
+                    </div>
+                    <div class="grand-total-box">
+                        <span class="lbl" style="color: var(--primary);">الإجمالي</span>
+                        <div class="val"><span id="lbl-grand-total">0.00</span> <small id="curr-symbol">₪</small></div>
+                    </div>
+                </div>
+
+                <div class="action-btns-group">
+                    <button class="btn-action btn-pay-submit" onclick="submitInvoice()">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        بيع
+                    </button>
+                    <button class="btn-action btn-print" onclick="previewPrint()">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                        طباعة
+                    </button>
+                    <button class="btn-action btn-hold" onclick="holdInvoice()">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        تعليق
+                    </button>
+                    <button class="btn-action btn-clear" onclick="clearCart()">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        تفريغ
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- مودال المعاينة والطباعة -->
+    <div class="modal-overlay" id="print-modal">
+        <div class="modal-card">
+            <div class="thermal-receipt" id="receipt-content">
+                <!-- محتوى الفاتورة الحرارية -->
+            </div>
+            <div style="margin-top: 10px; display: flex; gap: 4px;">
+                <button class="btn-action btn-pay-submit" style="flex: 1;" onclick="window.print()">طباعة الفاتورة</button>
+                <button class="btn-action btn-clear" onclick="closeModal()">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. البيانات التجريبية للمنتجات ---
+        const demoProducts = []; // يُملأ حصراً من بيانات شركة الوثيق
+
+        // أيقونات SVG للتصنيفات
+        const categories = []; // تُملأ حصراً من تصنيفات الشركة
+
+        // --- 2. حالة التطبيق (State) ---
+        let currentCart = [];
+        let currentCategory = 'all';
+        let currentPayMethod = 'cash';
+        let invoiceType = 'sales';
+        let multiPayAccounts = [{ id: 1, name: 'الصندوق الرئيسي', curr: 'ILS', amount: 0 }];
+        let heldInvoices = [];
+
+        // --- 3. تهيئة الصفحة ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts();
+            switchPayMethod('cash');
+            startClock();
+
+
+            window.addEventListener('keydown', handleShortcuts);
+        });
+
+        function startClock() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('live-clock').innerText = now.toLocaleTimeString('ar-EG');
+            }, 1000);
+        }
+
+        // --- 4. إدارة التصنيفات والمنتجات ---
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = categories.map(cat => `
+                <button class="cat-btn ${cat.id === currentCategory ? 'active' : ''}" onclick="selectCategory('${cat.id}')">
+                    ${cat.icon} ${cat.name}
+                </button>
+            `).join('');
+        }
+
+        function selectCategory(catId) {
+            currentCategory = catId;
+            renderCategories();
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const search = document.getElementById('product-search').value.toLowerCase();
+
+            const filtered = demoProducts.filter(p => {
+                const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
+                const matchesSearch = p.name.toLowerCase().includes(search) || p.code.toLowerCase().includes(search);
+                return matchesCat && matchesSearch;
+            });
+
+            document.getElementById('prod-count-disp').innerText = filtered.length;
+
+            grid.innerHTML = filtered.map(p => {
+                const isOut = p.stock <= 0;
+                return `
+                    <div class="product-card" onclick="addToCartById(${p.id})">
+                        <span class="stock-badge" style="${isOut ? 'background: var(--danger);' : ''}">
+                            ${isOut ? 'نفد المخزون' : 'متاح: ' + p.stock + ' ' + p.unit}
+                        </span>
+                        <img src="${p.img}" class="product-img" alt="${p.name}" onerror="this.src='https://via.placeholder.com/120'">
+                        <div class="product-title">${p.name}</div>
+                        <div class="product-code">${p.code}</div>
+                        <div class="product-footer">
+                            <span class="product-price">₪ ${p.price.toFixed(2)}</span>
+                            <div class="btn-add-card">
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterProducts() { renderProducts(); }
+
+        function addToCartById(id) {
+            const prod = demoProducts.find(p => p.id === id);
+            if (prod) addToCart(prod);
+        }
+
+        // --- 5. إدارة سلة المبيعات ---
+        function addToCart(product) {
+            const allowNegative = document.getElementById('allow-negative').checked;
+            if (product.stock <= 0 && !allowNegative) {
+                alert('عذراً، الصنف نفد من المخزون وغير مسموح بالبيع بالسالب!');
+                return;
+            }
+
+            const existingIndex = currentCart.findIndex(item => item.id === product.id && item.selectedUnit === product.unit);
+
+            if (existingIndex > -1) {
+                currentCart[existingIndex].qty += 1;
+            } else {
+                currentCart.push({
+                    id: product.id,
+                    code: product.code,
+                    name: product.name,
+                    img: product.img,
+                    selectedUnit: product.unit,
+                    units: product.units,
+                    price: product.price,
+                    discount: 0,
+                    qty: 1,
+                    stock: product.stock
+                });
+            }
+
+            renderCart();
+        }
+
+        function renderCart() {
+            const tbody = document.getElementById('cart-rows');
+            
+            if (currentCart.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="padding: 20px; color: var(--text-muted);">السلة فارغة. انقر على المنتجات لإضافتها.</td></tr>`;
+                updateTotals(0, 0, 0, 0);
+                return;
+            }
+
+            let subtotal = 0;
+            let totalQty = 0;
+
+            tbody.innerHTML = currentCart.map((item, index) => {
+                const itemTotal = (item.qty * item.price) - item.discount;
+                subtotal += itemTotal;
+                totalQty += item.qty;
+
+                const unitOptions = item.units.map(u => `<option value="${u.name}" ${u.name === item.selectedUnit ? 'selected' : ''}>${u.name}</option>`).join('');
+
+                return `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><img src="${item.img}" style="width: 22px; height: 22px; border-radius: 3px; object-fit: cover;"></td>
+                        <td style="text-align: right; font-weight: 700;">${item.name}</td>
+                        <td>
+                            <select class="select-unit" onchange="changeItemUnit(${index}, this.value)">
+                                ${unitOptions}
+                            </select>
+                        </td>
+                        <td>
+                            <div class="qty-control">
+                                <button class="btn-qty" onclick="changeQty(${index}, -1)">-</button>
+                                <input type="number" class="input-qty" value="${item.qty}" min="1" onchange="updateQtyInput(${index}, this.value)">
+                                <button class="btn-qty" onclick="changeQty(${index}, 1)">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="number" style="width: 45px; text-align: center; border: 1px solid var(--border-color); border-radius:3px;" value="${item.price.toFixed(2)}" onchange="updatePriceInput(${index}, this.value)">
+                        </td>
+                        <td>
+                            <input type="number" style="width: 38px; text-align: center; border: 1px solid var(--border-color); border-radius:3px;" value="${item.discount}" onchange="updateDiscountInput(${index}, this.value)">
+                        </td>
+                        <td style="font-weight: 700; color: var(--primary);">₪ ${itemTotal.toFixed(2)}</td>
+                        <td>
+                            <button class="btn-delete-row" onclick="removeItem(${index})">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            const invDiscountVal = parseFloat(document.getElementById('inv-discount').value) || 0;
+            const invDiscountType = document.getElementById('inv-discount-type').value;
+            let totalDiscount = invDiscountVal;
+            if (invDiscountType === 'pct') {
+                totalDiscount = (subtotal * invDiscountVal) / 100;
+            }
+
+            const afterDiscount = Math.max(0, subtotal - totalDiscount);
+            const taxRate = parseFloat(document.getElementById('tax-rate').value) || 0;
+            const taxVal = (afterDiscount * taxRate) / 100;
+            const grandTotal = afterDiscount + taxVal;
+
+            updateTotals(currentCart.length, totalQty, totalDiscount, taxVal, grandTotal);
+        }
+
+        function changeQty(index, delta) {
+            if (currentCart[index].qty + delta > 0) {
+                currentCart[index].qty += delta;
+                renderCart();
+            }
+        }
+
+        function updateQtyInput(index, val) {
+            const q = parseFloat(val);
+            if (q > 0) {
+                currentCart[index].qty = q;
+                renderCart();
+            }
+        }
+
+        function updatePriceInput(index, val) {
+            const p = parseFloat(val);
+            if (p >= 0) {
+                currentCart[index].price = p;
+                renderCart();
+            }
+        }
+
+        function updateDiscountInput(index, val) {
+            const d = parseFloat(val);
+            if (d >= 0) {
+                currentCart[index].discount = d;
+                renderCart();
+            }
+        }
+
+        function changeItemUnit(index, newUnitName) {
+            const item = currentCart[index];
+            const uObj = item.units.find(u => u.name === newUnitName);
+            if (uObj) {
+                item.selectedUnit = newUnitName;
+                item.price = uObj.price;
+                renderCart();
+            }
+        }
+
+        function removeItem(index) {
+            currentCart.splice(index, 1);
+            renderCart();
+        }
+
+        function clearCart() {
+            if (currentCart.length > 0 && confirm('هل أنت تأكد من تفريغ كافة عناصر السلة؟')) {
+                currentCart = [];
+                renderCart();
+            }
+        }
+
+        function updateTotals(count, qty, discount, tax, grandTotal = 0) {
+            document.getElementById('lbl-count').innerText = count;
+            document.getElementById('lbl-qty').innerText = qty;
+            document.getElementById('lbl-discount').innerText = discount.toFixed(2);
+            document.getElementById('lbl-tax').innerText = tax.toFixed(2);
+            document.getElementById('lbl-grand-total').innerText = grandTotal.toFixed(2);
+
+            const cashInput = document.getElementById('cash-received');
+            if (cashInput && currentPayMethod === 'cash') {
+                cashInput.value = grandTotal.toFixed(2);
+                calcCashReturn();
+            }
+        }
+
+        // --- 6. طرق الدفع الخمس بالكامل ---
+        function switchPayMethod(method, btnElement) {
+            currentPayMethod = method;
+            if (btnElement) {
+                document.querySelectorAll('.pay-tab').forEach(b => b.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+
+            const panel = document.getElementById('pay-panel-content');
+            const grandTotal = parseFloat(document.getElementById('lbl-grand-total').innerText) || 0;
+
+            if (method === 'cash') {
+                panel.innerHTML = `
+                    <div class="pay-fields-grid">
+                        <div class="form-group">
+                            <label>المبلغ المقبوض / المستلم</label>
+                            <input type="number" class="form-control" id="cash-received" value="${grandTotal.toFixed(2)}" oninput="calcCashReturn()">
+                        </div>
+                        <div class="form-group">
+                            <label>حساب الاستلام / الصندوق</label>
+                            <select class="form-control">
+                                <option>الصندوق الرئيسي - شيقل</option>
+                                <option>صندوق المبيعات السريعة</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ الباقي للعميل (الفكة)</label>
+                            <div style="font-size: 13px; font-weight: 800; color: var(--success); padding-top: 3px;" id="cash-return-val">₪ 0.00</div>
+                        </div>
+                    </div>
+                `;
+            } else if (method === 'credit') {
+                panel.innerHTML = `
+                    <div class="pay-fields-grid">
+                        <div class="form-group">
+                            <label>المبلغ المستحق (آجل)</label>
+                            <input type="text" class="form-control" value="₪ ${grandTotal.toFixed(2)}" readonly style="font-weight:bold; color:var(--danger);">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الاستحقاق</label>
+                            <input type="date" class="form-control" value="${getFutureDate(30)}">
+                        </div>
+                        <div class="form-group">
+                            <label>ملاحظات الدين</label>
+                            <input type="text" class="form-control" placeholder="ذمة على العميل...">
+                        </div>
+                    </div>
+                `;
+            } else if (method === 'partial') {
+                const half = (grandTotal / 2).toFixed(2);
+                panel.innerHTML = `
+                    <div class="pay-fields-grid">
+                        <div class="form-group">
+                            <label>المبلغ المدفوع (نقداً)</label>
+                            <input type="number" class="form-control" id="partial-paid" value="${half}" oninput="calcPartial()">
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ المتبقي (دين)</label>
+                            <input type="text" class="form-control" id="partial-rem" value="₪ ${(grandTotal - half).toFixed(2)}" readonly style="font-weight:bold; color:var(--danger);">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ استحقاق الباقي</label>
+                            <input type="date" class="form-control" value="${getFutureDate(15)}">
+                        </div>
+                    </div>
+                `;
+            } else if (method === 'multi') {
+                panel.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <span style="font-weight:700; font-size:10px;">توزيع المبلغ:</span>
+                        <button class="btn-mini-add" style="width:auto; padding:0 6px; font-size:10px;" onclick="addMultiPayRow()">+ حساب</button>
+                    </div>
+                    <div id="multi-pay-list" style="display:flex; flex-direction:column; gap:3px;">
+                    </div>
+                    <div style="margin-top:4px; font-weight:700; display:flex; justify-content:space-between; font-size:10px;">
+                        <span>مجموع المدفوع: <strong id="multi-total-paid" style="color:var(--primary);">₪ 0.00</strong></span>
+                        <span>المتبقي: <strong id="multi-remaining" style="color:var(--danger);">₪ ${grandTotal.toFixed(2)}</strong></span>
+                    </div>
+                `;
+                renderMultiPayRows();
+            } else if (method === 'installment') {
+                const down = (grandTotal * 0.2).toFixed(2);
+                panel.innerHTML = `
+                    <div class="pay-fields-grid">
+                        <div class="form-group">
+                            <label>الدفعة الأولى</label>
+                            <input type="number" class="form-control" id="inst-down" value="${down}" oninput="calcInstallments()">
+                        </div>
+                        <div class="form-group">
+                            <label>عدد الأقساط</label>
+                            <input type="number" class="form-control" id="inst-count" value="4" min="1" oninput="calcInstallments()">
+                        </div>
+                        <div class="form-group">
+                            <label>قيمة القسط الشهري</label>
+                            <input type="text" class="form-control" id="inst-val" readonly style="font-weight:bold; color:var(--primary);">
+                        </div>
+                    </div>
+                `;
+                calcInstallments();
+            }
+        }
+
+        function calcCashReturn() {
+            const grandTotal = parseFloat(document.getElementById('lbl-grand-total').innerText) || 0;
+            const received = parseFloat(document.getElementById('cash-received').value) || 0;
+            const ret = Math.max(0, received - grandTotal);
+            document.getElementById('cash-return-val').innerText = `₪ ${ret.toFixed(2)}`;
+        }
+
+        function calcPartial() {
+            const grandTotal = parseFloat(document.getElementById('lbl-grand-total').innerText) || 0;
+            const paid = parseFloat(document.getElementById('partial-paid').value) || 0;
+            const rem = Math.max(0, grandTotal - paid);
+            document.getElementById('partial-rem').value = `₪ ${rem.toFixed(2)}`;
+        }
+
+        function renderMultiPayRows() {
+            const container = document.getElementById('multi-pay-list');
+            if (!container) return;
+
+            container.innerHTML = multiPayAccounts.map((acc, idx) => `
+                <div style="display:flex; gap:4px; align-items:center;">
+                    <select class="form-control" style="flex:1.2;">
+                        <option>الصندوق الرئيسي</option>
+                        <option>بنك فلسطين - شيكات</option>
+                        <option>دفع إلكتروني / بطاقة</option>
+                    </select>
+                    <input type="number" class="form-control" style="flex:1;" value="${acc.amount}" placeholder="المبلغ" oninput="multiPayAccounts[${idx}].amount = parseFloat(this.value)||0; calcMultiPay();">
+                    ${idx > 0 ? `<button class="btn-delete-row" onclick="multiPayAccounts.splice(${idx},1); renderMultiPayRows(); calcMultiPay();"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>` : ''}
+                </div>
+            `).join('');
+            calcMultiPay();
+        }
+
+        function addMultiPayRow() {
+            multiPayAccounts.push({ id: Date.now(), name: 'حساب جديد', curr: 'ILS', amount: 0 });
+            renderMultiPayRows();
+        }
+
+        function calcMultiPay() {
+            const grandTotal = parseFloat(document.getElementById('lbl-grand-total').innerText) || 0;
+            const totalPaid = multiPayAccounts.reduce((sum, a) => sum + (a.amount || 0), 0);
+            const rem = grandTotal - totalPaid;
+
+            document.getElementById('multi-total-paid').innerText = `₪ ${totalPaid.toFixed(2)}`;
+            document.getElementById('multi-remaining').innerText = `₪ ${rem.toFixed(2)}`;
+        }
+
+        function calcInstallments() {
+            const grandTotal = parseFloat(document.getElementById('lbl-grand-total').innerText) || 0;
+            const down = parseFloat(document.getElementById('inst-down').value) || 0;
+            const count = parseInt(document.getElementById('inst-count').value) || 1;
+
+            const rem = Math.max(0, grandTotal - down);
+            const instVal = rem / count;
+            document.getElementById('inst-val').value = `₪ ${instVal.toFixed(2)}`;
+        }
+
+        function getFutureDate(days) {
+            const d = new Date();
+            d.setDate(d.getDate() + days);
+            return d.toISOString().split('T')[0];
+        }
+
+        // --- 7. عمليات الفاتورة والاعتماد ---
+        function setInvoiceType(type) {
+            invoiceType = type;
+            document.getElementById('btn-sales').classList.toggle('active', type === 'sales');
+            document.getElementById('btn-return').classList.toggle('active', type === 'return');
+        }
+
+        function createNewInvoice() {
+            if (currentCart.length > 0 && !confirm('هل تريد إلغاء الفاتورة الحالية والبدء بفاتورة جديدة؟')) return;
+            currentCart = [];
+            renderCart();
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('inv-number-disp').innerText = `INV-2026-${randomNum}`;
+        }
+
+        function submitInvoice() {
+            if (currentCart.length === 0) {
+                alert('السلة فارغة! يرجى إضافة منتجات قبل اعتماد البيع.');
+                return;
+            }
+
+            const custSelect = document.getElementById('customer-select').value;
+            if (currentPayMethod === 'credit' && custSelect === 'cash') {
+                alert('تنبيه: يجب اختيار عميل محدد عند البيع الآجل!');
+                return;
+            }
+
+            const invNum = document.getElementById('inv-number-disp').innerText;
+            const total = document.getElementById('lbl-grand-total').innerText;
+
+            alert(`✅ تم حفظ واعتمد الفاتورة بنجاح!\nرقم الفاتورة: ${invNum}\nالإجمالي: ₪ ${total}`);
+            
+            currentCart = [];
+            renderCart();
+            createNewInvoice();
+        }
+
+        function holdInvoice() {
+            if (currentCart.length === 0) {
+                alert('السلة فارغة، لا يوجد ما يتم تعليقه!');
+                return;
+            }
+
+            const holdObj = {
+                id: Date.now(),
+                invNum: document.getElementById('inv-number-disp').innerText,
+                items: [...currentCart],
+                time: new Date().toLocaleTimeString('ar-EG')
+            };
+
+            heldInvoices.push(holdObj);
+            document.getElementById('hold-count').innerText = heldInvoices.length;
+            
+            currentCart = [];
+            renderCart();
+            alert('تم تعليق الفاتورة بنجاح.');
+        }
+
+        function showHoldList() {
+            if (heldInvoices.length === 0) {
+                alert('لا توجد فواتير معلقة حالياً.');
+                return;
+            }
+
+            let msg = "اختر رقم الفاتورة لاستعادتها:\n";
+            heldInvoices.forEach((h, i) => {
+                msg += `${i + 1}. ${h.invNum} - (${h.items.length} أصناف) - ${h.time}\n`;
+            });
+
+            const choice = prompt(msg + "\nأدخل رقم الفاتورة المعلقة (مثال: 1):");
+            const idx = parseInt(choice) - 1;
+
+            if (idx >= 0 && idx < heldInvoices.length) {
+                currentCart = [...heldInvoices[idx].items];
+                heldInvoices.splice(idx, 1);
+                document.getElementById('hold-count').innerText = heldInvoices.length;
+                renderCart();
+            }
+        }
+
+        // --- 8. المعاينة والطباعة ---
+        function previewPrint() {
+            if (currentCart.length === 0) {
+                alert('لا يوجد محتوى في السلة للطباعة!');
+                return;
+            }
+
+            const invNum = document.getElementById('inv-number-disp').innerText;
+            const grandTotal = document.getElementById('lbl-grand-total').innerText;
+            const tax = document.getElementById('lbl-tax').innerText;
+
+            let html = `
+                <div class="receipt-header">
+                    <h3 style="margin:0;">شركة القدس للتجارة</h3>
+                    <div>فاتورة مبيعات حرارية</div>
+                    <small>${new Date().toLocaleString('ar-EG')}</small><br>
+                    <strong>رقم: ${invNum}</strong>
+                </div>
+                <div class="receipt-divider"></div>
+            `;
+
+            currentCart.forEach(item => {
+                const total = (item.qty * item.price) - item.discount;
+                html += `
+                    <div class="receipt-row">
+                        <span>${item.name} x${item.qty}</span>
+                        <span>₪ ${total.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="receipt-divider"></div>
+                <div class="receipt-row"><span>الضريبة:</span><span>₪ ${tax}</span></div>
+                <div class="receipt-row" style="font-weight:bold; font-size:13px;">
+                    <span>الإجمالي الكلي:</span><span>₪ ${grandTotal}</span>
+                </div>
+                <div class="receipt-divider"></div>
+                <div style="text-align:center; font-size:10px; margin-top:6px;">شكراً لتسوقكم معنا!</div>
+            `;
+
+            document.getElementById('receipt-content').innerHTML = html;
+            document.getElementById('print-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('print-modal').style.display = 'none';
+        }
+
+        function updateCurrency() {
+            const curr = document.getElementById('currency-select').value;
+            const rateInput = document.getElementById('exchange-rate');
+            const currSymbol = document.getElementById('curr-symbol');
+
+            if (curr === 'USD') {
+                rateInput.value = '3.65';
+                currSymbol.innerText = '$';
+            } else if (curr === 'JOD') {
+                rateInput.value = '5.10';
+                currSymbol.innerText = 'JD';
+            } else {
+                rateInput.value = '1.00';
+                currSymbol.innerText = '₪';
+            }
+        }
+
+        // --- 9. اختصارات لوحة المفاتيح ---
+        function handleShortcuts(e) {
+            if (e.key === 'F2') {
+                e.preventDefault();
+                document.getElementById('product-search').focus();
+            } else if (e.key === 'F4') {
+                e.preventDefault();
+                document.getElementById('customer-select').focus();
+            } else if (e.key === 'F8') {
+                e.preventDefault();
+                holdInvoice();
+            } else if (e.key === 'F10') {
+                e.preventDefault();
+                submitInvoice();
+            } else if (e.key === 'F12') {
+                e.preventDefault();
+                previewPrint();
+            }
+        }
+    </script>
+    <script src="v44-bridge-child.js"></script>
+    <script src="thermal-qr.js"></script>
+    <script src="thermal-core.js"></script>
+    <script src="thermal-pos-preview.js"></script>
+</body>
+</html>

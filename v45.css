@@ -1,0 +1,41 @@
+/* WATHEEQ v4.5 • Desktop stability and dashboard layout • Mobile unchanged */
+@media(min-width:1024px){
+ /* POS iframe starts below the real ERP header. CSS !important beats old inline inset:0. */
+ body.w41-pos-active #w41-exact-pos{
+  position:fixed!important;top:var(--w45-header-h,60px)!important;
+  bottom:0!important;left:0!important;right:0!important;
+  width:100vw!important;height:calc(100dvh - var(--w45-header-h,60px))!important;
+  z-index:900!important;border:0!important;box-sizing:border-box!important;
+  overflow:hidden!important;background:#f1f5f9!important;
+ }
+ /* The parent header and its dropdown menus remain over the POS, dialogs above it. */
+ body.w41-pos-active main>header{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;z-index:1600!important}
+ body.w41-pos-active #modal:not([hidden]),body.w41-pos-active #choicePage:not([hidden]),body.w41-pos-active #busyIndicator:not([hidden]){z-index:1900!important}
+ body.w41-pos-active #toast{z-index:1950!important}
+ /* Brand image is the actual WATHEQ SVG; remove blank letter tile. */
+ body.w36-desktop #w36Brand{display:inline-flex!important;align-items:center!important;gap:6px!important}
+ body.w36-desktop #w36Brand img{width:29px!important;height:29px!important;min-width:29px!important;object-fit:contain!important;display:block!important;opacity:1!important;filter:none!important;border:1px solid #ffffff5c!important;border-radius:8px!important;background:#ffffff12!important}
+ body.w36-desktop #w36HeaderTitle{color:#fff!important}
+ /* Sync indicator used to inherit white pill and global opacity/filter rules. */
+ body.w36-desktop main>header .header-tools #storageState{width:38px!important;min-width:38px!important;max-width:38px!important;height:38px!important;min-height:38px!important;max-height:38px!important;display:grid!important;place-items:center!important;padding:0!important;border-radius:10px!important;border:1px solid #ffffff40!important;background:#ffffff20!important;color:#fff!important;opacity:1!important;filter:none!important;box-shadow:none!important;overflow:visible!important}
+ body.w36-desktop main>header .header-tools #storageState>span{width:30px!important;height:30px!important;min-width:30px!important;display:grid!important;place-items:center!important;padding:0!important;margin:0!important;line-height:1!important;opacity:1!important;animation:none!important;border-radius:8px!important;box-shadow:none!important;filter:none!important;background:transparent!important;color:#fff!important}
+ body.w36-desktop main>header .header-tools #storageState svg{display:block!important;position:static!important;width:21px!important;height:21px!important;min-width:21px!important;max-height:21px!important;stroke:currentColor!important;fill:none!important;opacity:1!important;filter:none!important;margin:auto!important;background:transparent!important}
+ body.w36-desktop main>header #storageState[data-sync='synced']>span{background:#087f61!important;color:#fff!important}
+ body.w36-desktop main>header #storageState[data-sync='syncing']>span,
+ body.w36-desktop main>header #storageState[data-sync='pending']>span{background:#1d58c8!important;color:#fff!important}
+ body.w36-desktop main>header #storageState[data-sync='syncing'] svg,
+ body.w36-desktop main>header #storageState[data-sync='pending'] svg{animation:w33rotate 1.2s linear infinite!important}
+ body.w36-desktop main>header #storageState[data-sync='offline']>span,
+ body.w36-desktop main>header #storageState[data-sync='error']>span,
+ body.w36-desktop main>header #storageState[data-sync='conflict']>span{background:#c37a17!important;color:#fff!important}
+ /* Explicit click-open only. Hover / focus no longer trigger unstable first-open menus. */
+ body.w36-desktop #w36Nav .w36-dropdown,
+ body.w36-desktop #w36Nav .w36-menu:hover .w36-dropdown,
+ body.w36-desktop #w36Nav .w36-menu:focus-within .w36-dropdown{display:none!important}
+ body.w36-desktop #w36Nav .w36-menu.w36-open .w36-dropdown,
+ body.w36-desktop #w36Nav .w36-menu.w36-open:hover .w36-dropdown{display:block!important}
+ body.w36-desktop #w36Nav .w36-menu-trigger{transition:background-color .14s ease!important;transform:none!important;animation:none!important}
+ body.w36-desktop #w36Nav .w36-dropdown{animation:none!important;transition:none!important;box-shadow:0 12px 32px #112b5350!important}
+
+}
+@media print{#w41-exact-pos{display:none!important}}

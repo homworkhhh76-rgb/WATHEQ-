@@ -1,0 +1,12 @@
+/* Stable geometry across route changes, saves and dropdowns. */
+*,*::before,*::after{animation:none!important;transition-property:color,background-color,border-color,box-shadow!important;transition-duration:100ms!important;scroll-behavior:auto!important}
+html{overflow-y:scroll;scrollbar-gutter:stable}
+#content,.route-enter,.native-enter,.tab-enter,.r21-enter,.w26-enter,.slide-left,.slide-right,.app-page.entering{transform:none!important;translate:none!important;opacity:1!important}
+#w24Loading,.w24-loading-circle,.loading-ring,.header-spinner,.spinner,.loader,.loading-spinner,.w33-sync-spin,#busyIndicator{display:none!important}
+.w24-start-loading{min-height:0!important;padding:0!important}
+#modal .w28-progress,#modal .w28-progress b,#modal .w28-progress span,#modal .w28-progress button{color:#fff!important}
+button:active,.product:hover,.product-card:hover,.p51-card:hover,.w49-dashboard .card-shadow:hover{transform:none!important;translate:none!important}
+.p51-dots,.dots-btn{width:34px!important;height:34px!important;min-width:34px!important;background:#f1f5f9!important;color:#334155!important;border-radius:9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:6px!important}
+.p51-dots svg,.dots-btn svg{width:22px!important;height:22px!important;stroke:none!important;fill:currentColor!important}
+#w36Nav .w36-dropdown,#nativeActionMenu,#w25Menu,.w50-popup{animation:none!important;transform:none!important;translate:none!important;transition:none!important;scrollbar-gutter:stable}
+@media(min-width:1024px){body.w48-desktop main>header{overflow:visible!important}body.w48-desktop #w36Nav .w36-menu-trigger{transform:none!important;transition:background-color .1s!important}body.w48-desktop #w36Nav .w36-dropdown{z-index:100000!important}body.w48-desktop #w36Nav .w36-down{transition:none!important}body.w48-desktop #content{overflow-anchor:none}}

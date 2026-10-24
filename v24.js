@@ -30,5 +30,5 @@ render=function(){w24Render();if(!S)return;document.title='الوثيق | إدا
 };
 // Actual asynchronous data reads only; the initial shell already contains the same indicator.
 let w24Reads=0;const w24Read=Store.read;
-Store.read=async function(...args){w24Reads++;let loader=$('#w24Loading');if(!loader){loader=document.createElement('div');loader.id='w24Loading';loader.setAttribute('role','status');loader.innerHTML='<span class="w24-loading-circle"><i></i></span><span>جاري التحميل...</span>';document.body.append(loader)}loader.hidden=false;try{return await w24Read.apply(this,args)}finally{if(--w24Reads===0)loader.hidden=true}};
+Store.read=async function(...args){return await w24Read.apply(this,args)};
 if(S)render();

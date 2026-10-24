@@ -1,0 +1,69 @@
+/* الوثيق v4.6 — performance-first, independent of ERP accounting engine */
+/* Legacy overlapping entry animations on render were the source of the visual shake.
+   Route animation is now driven only by route changes in v46.js. */
+#content,#content.slide-left,#content.slide-right,#content.native-enter,#content.r21-enter,
+#content.w26-enter,#content.w31-enter{
+ animation:none!important;transform:none!important;translate:none!important;
+}
+#content :is(.stat,.panel,.native-chart,.card,.document-card,.product-list-card,.w26-enter,.w31-enter,.w28-section,.w29-account,.more-group,.menu-accordion){
+ animation:none!important;animation-delay:0s!important;
+}
+/* Keep interactions snappy without moving the layout or other elements. */
+button,a,select{ -webkit-tap-highlight-color:transparent }
+@media(min-width:1024px){
+ /* The original homepage: stats/quick actions above, graphs below. */
+ body.w36-desktop.w33-dashboard-page #content .w33-dashboard-grid.w46-dash-layout{
+  width:100%;min-width:0;display:flex!important;flex-direction:column!important;gap:16px!important;align-items:stretch!important;
+ }
+ body.w36-desktop #content .w46-dash-top{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,270px);gap:14px;align-items:stretch;direction:rtl;
+ }
+ body.w36-desktop #content .w46-dash-top>.w33-dashboard-stats{min-width:0}
+ body.w36-desktop #content .w46-dash-top .native-stats{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;margin:0!important;
+ }
+ body.w36-desktop #content .w46-dash-top .native-stats .stat{
+  min-width:0!important;min-height:112px!important;padding:14px!important;border-radius:13px!important;
+ }
+ body.w36-desktop #content .w46-dash-top .native-stats .stat strong{
+  font-size:clamp(17px,1.75vw,24px)!important;overflow-wrap:anywhere;
+ }
+ body.w36-desktop #content .w46-dash-quick{
+  background:var(--panel,#fff);border:1px solid var(--line,#e1e8f2);border-radius:13px;
+  padding:11px;box-shadow:var(--shadow,0 3px 12px #142b5b0d);min-width:0;
+ }
+ body.w36-desktop #content .w46-dash-quick h3{font-size:12px;line-height:1.5;margin:0 0 8px;font-weight:800}
+ body.w36-desktop #content .w46-dash-quick .quick-grid{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;margin:0!important;
+ }
+ body.w36-desktop #content .w46-dash-quick .quick-grid button{
+  min-width:0!important;min-height:42px!important;height:44px!important;border-radius:9px!important;
+  padding:5px 6px!important;font-size:10px!important;font-weight:700!important;line-height:1.2!important;
+  display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+  gap:5px!important;white-space:normal!important;text-align:center!important;
+ }
+ body.w36-desktop #content .w46-dash-quick .quick-grid button svg{width:15px!important;height:15px!important;flex-shrink:0}
+ body.w36-desktop #content .w46-dash-layout>.w33-dashboard-charts{
+  min-width:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:14px!important;margin:0!important;
+ }
+ body.w36-desktop #content .w46-dash-layout>.w33-dashboard-charts .native-chart{
+  min-width:0!important;width:100%!important;margin:0!important;
+ }
+ /* Do not retain v45's compressed chart styling; graphs have room below. */
+ body.w36-desktop #content .w46-dash-layout>.w33-dashboard-charts .chart-paper svg{
+  height:145px!important;max-height:145px!important;
+ }
+ /* Opened by click, closed immediately after selecting an item. */
+ body.w36-desktop #w36Nav .w36-menu.w36-open .w36-dropdown{display:block!important;opacity:1!important;visibility:visible!important}
+ body.w36-desktop #w36Nav .w36-dropdown{will-change:auto!important}
+}
+@media(min-width:1024px) and (max-width:1199px){
+ body.w36-desktop #content .w46-dash-top{grid-template-columns:minmax(0,1fr) minmax(210px,235px);gap:10px}
+ body.w36-desktop #content .w46-dash-top .native-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ body.w36-desktop #content .w46-dash-top .native-stats .stat{min-height:100px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #content,*{scroll-behavior:auto!important}
+}
