@@ -3,6 +3,8 @@
  * The original DOM and CSS are not reconstructed or emulated. The adapter alone
  * connects real ERP stock, cart, customer, tax, accounts and accounting posting. */
 (()=>{
+ const purchase=()=>window.WatheeqCashierKind==='purchase';
+ const unitPrice=(p,i)=>purchase()?window.w54PurchasePrice(p,i):(priceGroup==='wholesale'&&p.units[i].wholesale>0?p.units[i].wholesale:E.priceFor(S,p.id,i,posParty));
  const laptop=()=>window.matchMedia('(min-width:1024px)').matches;
  const prevPos=posPage;
  let frame=null,category='',search='',priceGroup='retail',globalDiscount='',discountKind='val',allowNegative=false,activeTenant=null;
@@ -15,7 +17,7 @@
  function applyGlobal(){resetGlobal();const allowed=cart.map(l=>Math.max(0,E.md(l.qty,l.price,1000)-(l.discount||0))),total=allowed.reduce((a,b)=>a+b,0);if(!total)return;
   let amount=0;try{amount=E.dec(String(globalDiscount||'0'))}catch{};
   amount=Math.max(0,discountKind==='pct'?Math.round(total*Math.min(10000,amount)/10000):amount);amount=Math.min(amount,total);
-  let distributed=0;cart.forEach((l,i)=>{const portion=i===cart.length-1?amount-distributed:Math.min(allowed[i],Math.floor(amount*allowed[i]/total));l.discount=(l.discount||0)+portion;l.w41GlobalDiscount=portion;distributed+=portion});
+  let remaining=amount,remainingBase=total;cart.forEach((l,i)=>{const portion=remainingBase?Math.min(allowed[i],Math.round(remaining*allowed[i]/remainingBase)):0;l.discount=(l.discount||0)+portion;l.w41GlobalDiscount=portion;remaining-=portion;remainingBase-=allowed[i]});
  }
  function totalInfo(){let gross=0,tax=0,discount=0,quantity=0;
   cart.forEach(l=>{const p=find('products',l.product);if(!p)return;const base=E.md(l.qty,l.price,1000);const d=Math.min(base,l.discount||0),net=base-d;gross+=base;discount+=d;tax+=E.md(net,p.tax||0,10000);quantity+=l.qty/1000});
@@ -24,15 +26,15 @@
  const codePoint=(p)=>p?.units?.[0]?.barcode||p?.code||'';
  function snapshot(){if(!S)return null;const tenant=window.WatheeqAuth?.identity?.companyId||'';if(tenant!==activeTenant){activeTenant=tenant;globalDiscount='';discountKind='val';payRows=[];payMode='cash';priceGroup='retail';allowNegative=false;lastInvoiceNumber='جديدة'}const curr=w34Pay.currency||S.settings.currency,wh=session.getItem('posWarehouse')||S.settings.defaultWarehouse||S.warehouses[0]?.id||'main';
   const ps=products();const pr=ps.map((p,i)=>{const u=p.units[0]||{},st=p.type==='service'?999999:E.stock(S,p.id,wh).qty;
-   const priceOf=(idx)=>{const unit=p.units[idx];return priceGroup==='wholesale'&&unit.wholesale>0?unit.wholesale:E.priceFor(S,p.id,idx,posParty)};
+   const priceOf=(idx)=>{const unit=p.units[idx];return unitPrice(p,idx)};
    return {id:i+1,code:p.code||u.barcode||'',name:p.name,category:p.category||'',stock:p.type==='service'?999999:st/(u.factor||1000),unit:u.name||'قطعة',price:normMoney(priceOf(0)),units:p.units.map((v,j)=>({name:v.name,rate:v.factor/1000,price:normMoney(priceOf(j)),index:j})),img:p.image||'',kind:p.type,barcode:codePoint(p)};
   });
-  const ct=cart.map((l,i)=>{const p=find('products',l.product),u=p?.units[l.unit];return {id:i+1,product:l.product,code:p?.code||u?.barcode||'',name:p?.name||'',img:p?.image||'',selectedUnit:u?.name||'قطعة',unitIndex:l.unit,units:(p?.units||[]).map((x,j)=>({name:x.name,index:j,price:normMoney(priceGroup==='wholesale'&&x.wholesale>0?x.wholesale:E.priceFor(S,p.id,j,posParty))})),price:normMoney(l.price),discount:normMoney(l.discount||0),qty:l.qty/1000,stock:0};});
+  const ct=cart.map((l,i)=>{const p=find('products',l.product),u=p?.units[l.unit];return {id:i+1,product:l.product,code:p?.code||u?.barcode||'',name:p?.name||'',img:p?.image||'',selectedUnit:u?.name||'قطعة',unitIndex:l.unit,units:(p?.units||[]).map((x,j)=>({name:x.name,index:j,price:normMoney(unitPrice(p,j))})),price:normMoney(l.price),discount:normMoney(l.discount||0),qty:l.qty/1000,stock:0};});
   const rate=w31Rate(curr,posCash);const tot=totalInfo();const operator=window.WatheeqAuth?.identity?.account?.name||window.WatheeqAuth?.identity?.account?.username||'المستخدم';
-  return {products:pr,cart:ct,categories:[...new Set(ps.map(p=>p.category).filter(Boolean))],warehouses:S.warehouses.map(w=>({id:w.id,name:w.name})),warehouse:wh,
-   customers:S.parties.filter(p=>!p.archived&&['customer','both'].includes(p.type)).map(p=>({id:p.id,name:p.name})),customer:posParty||'',
+  return {kind:purchase()?'purchase':'sale',products:pr,cart:ct,categories:[...new Set(ps.map(p=>p.category).filter(Boolean))],warehouses:S.warehouses.map(w=>({id:w.id,name:w.name})),warehouse:wh,
+   customers:S.parties.filter(p=>!p.archived&&[purchase()?'supplier':'customer','both'].includes(p.type)).map(p=>({id:p.id,name:p.name})),customer:posParty||'',
    currencies:S.currencies.map(c=>({id:c.id,name:c.name})),currency:curr,rate:rate/1000000,baseCurrency:S.settings.currency,cashAccounts:cashAccounts().map(a=>({id:a.id,name:a.name})),cash:posCash,
-   printSize:S.settings.print||'80mm',payMode,discountKind,globalDiscount,priceGroup,allowNegative:allowNegative&&!!S.settings.negativeStock,negativePermitted:!!S.settings.negativeStock,canEditPrice:typeof w34Manager!=='function'||w34Manager()||!!w34Me()?.permissions?.canEditPrice,held:S.drafts.filter(d=>d.kind==='sale').length,invoiceNumber:cart.length?'جديدة':(lastInvoiceNumber==='جديدة'?'جديدة':'آخر فاتورة: '+lastInvoiceNumber),operator,company:S.settings.company,
+   printSize:S.settings.print||'80mm',payMode,discountKind,globalDiscount,priceGroup,allowNegative:allowNegative&&!!S.settings.negativeStock,negativePermitted:!!S.settings.negativeStock,canEditPrice:typeof w34Manager!=='function'||w34Manager()||!!w34Me()?.permissions?.canEditPrice,held:S.drafts.filter(d=>d.kind===(purchase()?'purchase':'sale')).length,invoiceNumber:cart.length?'جديدة':(lastInvoiceNumber==='جديدة'?'جديدة':'آخر فاتورة: '+lastInvoiceNumber),operator,company:S.settings.company,
    logo:S.settings.logoMono||S.settings.logo||'',phone:S.settings.phone||'',address:S.settings.address||'',online:navigator.onLine,totals:tot,
    taxEffective:tot.gross-tot.discount>0?Math.round(tot.tax/(tot.gross-tot.discount)*10000)/100:0,payRows:payRows.map(x=>({...x})),receipt:{number:lastInvoiceNumber,company:S.settings.company,phone:S.settings.phone||'',address:S.settings.address||'',logo:S.settings.logoMono||S.settings.logo||'',currency:S.settings.currency,customer:S.parties.find(x=>x.id===posParty)?.name||'عميل نقدي',date:today(),totals:tot,lines:cart.map(l=>{const p=find('products',l.product);return {name:p?.name||'',unit:p?.units[l.unit]?.name||'',qty:l.qty/1000,price:l.price/100,discount:(l.discount||0)/100,tax:(p?.tax||0)/100}})}};
  }
@@ -68,8 +70,8 @@
  function errorToUser(e){const msg=e?.message||String(e);try{if(frame?.contentWindow)frame.contentWindow.postMessage({type:'watheeq:pos-notice',message:msg,kind:'error'},'*');else toast(msg)}catch{toast(msg)}console.warn('[POS]',msg)}
  function doChange(index,key,value){const l=cart[index];if(!l) return false;resetGlobal();const p=find('products',l.product);try{
    if(key==='price'&&typeof w34Manager==='function'&&!w34Manager()&&!w34Me()?.permissions?.canEditPrice)throw Error('ليس لديك صلاحية تعديل سعر البيع');
-   if(key==='qty'){const n=E.dec(String(value),3);if(n<=0||!Number.isSafeInteger(n))throw Error('أدخل كمية صحيحة');if(!p.units[l.unit].decimal&&n%1000)throw Error('هذه الوحدة لا تسمح بكمية كسرية');if(p.type!=='service'){const wh=session.getItem('posWarehouse')||S.settings.defaultWarehouse||S.warehouses[0]?.id||'main';const used=cart.reduce((sum,x,j)=>sum+(j===index?E.md(n,p.units[l.unit].factor,1000):x.product===p.id?E.md(x.qty,p.units[x.unit].factor,1000):0),0);if(used>E.stock(S,p.id,wh).qty)throw Error('لا توجد كمية كافية من '+p.name)}l.qty=n}
-   else if(key==='unit'){const n=Number(value);if(!p.units[n])throw Error('الوحدة غير موجودة');if(p.type!=='service'){const wh=session.getItem('posWarehouse')||S.settings.defaultWarehouse||S.warehouses[0]?.id||'main';const used=cart.reduce((sum,x,j)=>sum+(x.product===p.id?E.md(x.qty,p.units[j===index?n:x.unit].factor,1000):0),0);if(used>E.stock(S,p.id,wh).qty)throw Error('الكمية غير متوفرة بهذه الوحدة')}l.unit=n;l.price=priceGroup==='wholesale'&&p.units[n].wholesale>0?p.units[n].wholesale:E.priceFor(S,p.id,n,posParty)}
+   if(key==='qty'){const n=E.dec(String(value),3);if(n<=0||!Number.isSafeInteger(n))throw Error('أدخل كمية صحيحة');if(!p.units[l.unit].decimal&&n%1000)throw Error('هذه الوحدة لا تسمح بكمية كسرية');if(!purchase()&&p.type!=='service'){const wh=session.getItem('posWarehouse')||S.settings.defaultWarehouse||S.warehouses[0]?.id||'main';const used=cart.reduce((sum,x,j)=>sum+(j===index?E.md(n,p.units[l.unit].factor,1000):x.product===p.id?E.md(x.qty,p.units[x.unit].factor,1000):0),0);if(used>E.stock(S,p.id,wh).qty)throw Error('لا توجد كمية كافية من '+p.name)}l.qty=n}
+   else if(key==='unit'){const n=Number(value);if(!p.units[n])throw Error('الوحدة غير موجودة');if(!purchase()&&p.type!=='service'){const wh=session.getItem('posWarehouse')||S.settings.defaultWarehouse||S.warehouses[0]?.id||'main';const used=cart.reduce((sum,x,j)=>sum+(x.product===p.id?E.md(x.qty,p.units[j===index?n:x.unit].factor,1000):0),0);if(used>E.stock(S,p.id,wh).qty)throw Error('الكمية غير متوفرة بهذه الوحدة')}l.unit=n;l.price=unitPrice(p,n)}
    else if(key==='price'){const n=E.dec(String(value));if(n<0)throw Error('السعر غير صحيح');l.price=n}
    else if(key==='discount'){const n=E.dec(String(value));if(n<0||n>E.md(l.qty,l.price,1000))throw Error('قيمة الخصم تتجاوز إجمالي البند');l.discount=n}
    applyGlobal();persistCart();render();return true;
@@ -83,13 +85,13 @@
  function addProduct(num,unit=0){
   const p=products()[Number(num)-1];if(!p||!p.units?.[unit])return false;
   const wh=session.getItem('posWarehouse')||S.settings.defaultWarehouse||S.warehouses[0]?.id||'main';
-  if(remainingStock(p.id,unit,wh)<0){errorToUser(Error('الكمية المطلوبة تتجاوز المخزون المتاح: '+p.name));return false}
+  if(!purchase()&&remainingStock(p.id,unit,wh)<0){errorToUser(Error('الكمية المطلوبة تتجاوز المخزون المتاح: '+p.name));return false}
   resetGlobal();
-  const price=priceGroup==='wholesale'&&p.units[unit].wholesale>0?p.units[unit].wholesale:E.priceFor(S,p.id,unit,posParty);
+  const price=unitPrice(p,unit);
   // Reuse the same product-to-cart operation as the phone cashier.
   addCart(p.id,unit);
   const line=cart.find(l=>l.product===p.id&&l.unit===unit);
-  if(line && priceGroup==='wholesale'&&p.units[unit].wholesale>0)line.price=price;
+  if(line && (purchase()||priceGroup==='wholesale'&&p.units[unit].wholesale>0))line.price=price;
   applyGlobal();persistCart();render();return true;
  }
  function paySetup(data={}){payMode=data.method||payMode;posMode=payMode;w34Pay.currency=data.currency||w34Pay.currency||S.settings.currency;
@@ -101,14 +103,18 @@
  }
  const bridge={
   snapshot,
+  refresh,
+  discountState:()=>({value:globalDiscount,kind:discountKind}),
+  restoreDiscount:(value,kind)=>{globalDiscount=value||'';discountKind=kind||'val';applyGlobal()},
+  recalculateDiscount:()=>applyGlobal(),
   back:()=>{location.hash='#dashboard'},
   returnInvoice:()=>{location.hash='#invoices';toast('اختر الفاتورة الأصلية من سجل الفواتير للمرتجع')},
-  customer:id=>{posParty=id||'';resetGlobal();cart.forEach(l=>{let p=find('products',l.product);if(p)l.price=priceGroup==='wholesale'&&p.units[l.unit].wholesale>0?p.units[l.unit].wholesale:E.priceFor(S,p.id,l.unit,posParty)});applyGlobal();persistCart();render()},
-  addCustomer:()=>editEntity('parties'),
+  customer:id=>{posParty=id||'';resetGlobal();cart.forEach(l=>{let p=find('products',l.product);if(p)l.price=unitPrice(p,l.unit)});applyGlobal();persistCart();render()},
+  addCustomer:()=>{editEntity('parties');if(purchase()){const type=document.querySelector('#modalBody [name=type]');if(type){type.value='supplier';type.dispatchEvent(new Event('change',{bubbles:true}))}}},
   warehouse:id=>{if(!S.warehouses.some(x=>x.id===id))return;session.setItem('posWarehouse',id);render()},
   currency:id=>{if(S.currencies.some(x=>x.id===id)){w34Pay.currency=id;refresh()}},
   cash:id=>{if(cashAccounts().some(x=>x.id===id)){posCash=id;refresh()}},
-  priceGroup:mode=>{priceGroup=mode==='wholesale'?'wholesale':'retail';resetGlobal();cart.forEach(l=>{let p=find('products',l.product);if(p)l.price=priceGroup==='wholesale'&&p.units[l.unit].wholesale>0?p.units[l.unit].wholesale:E.priceFor(S,p.id,l.unit,posParty)});applyGlobal();persistCart();render()},
+  priceGroup:mode=>{priceGroup=mode==='wholesale'?'wholesale':'retail';resetGlobal();cart.forEach(l=>{let p=find('products',l.product);if(p)l.price=unitPrice(p,l.unit)});applyGlobal();persistCart();render()},
   negative:bool=>{if(bool&&!S.settings.negativeStock){allowNegative=false;errorToUser(Error('تفعيل البيع بالسالب غير مدعوم في محرك المخزون الحالي؛ لا يمكن اعتماد عملية تتجاوز الرصيد'));}else allowNegative=!!bool;refresh()},
   discount:(value,kind)=>{resetGlobal();globalDiscount=String(value||'0');discountKind=kind==='pct'?'pct':'val';applyGlobal();persistCart();render()},
   addProduct,scan:input=>{const code=String(input||'').trim(),p=products().find(x=>x.units.some(u=>u.barcode===code)||x.code===code);if(!p){errorToUser(Error('الباركود غير مسجل في أصناف الشركة'));return false}const unit=p.units.findIndex(u=>u.barcode===code);return addProduct(products().indexOf(p)+1,unit<0?0:unit)},
@@ -120,7 +126,7 @@
   hold:async()=>{if(!cart.length){toast('السلة فارغة');return}await actions.suspend();if(!cart.length){globalDiscount='';payRows=[];payMode='cash';posMode='cash';refresh()}},
   holds:()=>actions.drafts(),
   camera:()=>actions.camera(),
-  setPay:method=>{payMode=method;posMode=method;refresh()},
+  setPay:method=>{if(purchase()&&method==='installment')return;payMode=method;posMode=method;refresh()},
   accounts:()=>cashAccounts().map(a=>({id:a.id,name:a.name})),
   payments:rows=>{payRows=rows.map(r=>({...r}));w35SplitRows=payRows.map(r=>({...r,amount:String(r.amount||'')}))},
   checkout:async data=>{
@@ -128,6 +134,7 @@
    selling=true;
    try{
     if(!S || !window.WatheeqAuth?.identity)throw Error('بيانات الشركة غير محمّلة؛ سجّل الدخول أولاً');
+    if(purchase()){paySetup(data);const posted=await window.w54PurchaseCheckout(data);if(!posted)return false;lastInvoiceNumber=posted.number;globalDiscount='';discountKind='val';payRows=[];payMode=posMode='cash';render();return true}
     WatheeqPermissions.require('pos','create');
     if(!cart.length)throw Error('أضف أصنافاً إلى السلة أولاً');
     const mode=data.method||payMode,currency=data.currency||S.settings.currency,account=data.account||posCash;
@@ -202,7 +209,7 @@
   else if(frame){frame.remove();frame=null;lastSnapshotPayload=''}
   document.body.classList.toggle('w41-pos-active',wanted);return result;};
  const style=document.createElement('style');style.textContent='@media(min-width:1024px){body.w41-pos-active{overflow:hidden!important}body.w41-pos-active #w40-pos{display:none!important}body.w41-pos-active #modal:not([hidden]),body.w41-pos-active #choicePage:not([hidden]),body.w41-pos-active #busyIndicator:not([hidden]),body.w41-pos-active #v19ShiftSheet{z-index:1005!important}body.w41-pos-active #toast{z-index:1008!important}}@media print{#w41-exact-pos{display:none!important}}';document.head.append(style);
- window.addEventListener('resize',()=>{if(S&&route==='pos')render()},{passive:true});
+ let wasLaptop=laptop();window.addEventListener('resize',()=>{const now=laptop();if(now!==wasLaptop){wasLaptop=now;if(S&&route==='pos')render()}},{passive:true});
  // Most ERP mutations call render, but window-focus/cloud sync can also change data asynchronously.
  window.addEventListener('online',refresh);window.addEventListener('offline',refresh);
  // Child can load before/after the parent becomes ready; always deliver current company data.

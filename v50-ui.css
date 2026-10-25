@@ -23,3 +23,5 @@
 .w50-option:disabled{opacity:.45;cursor:default}
 .w50-empty{padding:20px;text-align:center;color:#64748b}
 @media print{.w50-popup{display:none!important}}
+
+#inv-discount{min-width:0;flex:1}.invoice-meta-bar .w50-select-wrap:has(#inv-discount-type){flex:0 0 88px!important;min-width:88px!important}

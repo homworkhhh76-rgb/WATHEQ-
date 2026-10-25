@@ -48,12 +48,7 @@
   if(lastRoute!==current){
    lastRoute=current;closeMenus();
    if(transition){try{transition.cancel()}catch{}transition=null}
-   if(current!=='pos'&&!window.matchMedia('(prefers-reduced-motion:reduce)').matches&&content.animate){
-    // WAAPI opacity-only animation: no manual offsetWidth or layout flush;
-    // no repeated animation during cart updates or cloud synchronization.
-    // No replayed page animation: retain stable content during navigation.
 
-   }
   }
   return result;
  };

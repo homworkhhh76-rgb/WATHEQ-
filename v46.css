@@ -3,7 +3,7 @@
    Route animation is now driven only by route changes in v46.js. */
 #content,#content.slide-left,#content.slide-right,#content.native-enter,#content.r21-enter,
 #content.w26-enter,#content.w31-enter{
- animation:none!important;transform:none!important;translate:none!important;
+ animation:none!important;transform:none;translate:none;
 }
 #content :is(.stat,.panel,.native-chart,.card,.document-card,.product-list-card,.w26-enter,.w31-enter,.w28-section,.w29-account,.more-group,.menu-accordion){
  animation:none!important;animation-delay:0s!important;

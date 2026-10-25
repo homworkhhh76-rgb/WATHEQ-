@@ -79,6 +79,15 @@
   return;
  }
  const before=state;state=data;syncing=true;try{
+ const buying=data.kind==='purchase';document.body.classList.toggle('w54-purchase',buying);
+ const customerLabel=$('customer-select')?.closest('.form-group')?.querySelector('label');if(customerLabel)customerLabel.textContent=buying?'المورد (F4)':'العميل (F4)';
+ document.querySelectorAll('.pay-tab').forEach((b,i)=>{if(i===4)b.hidden=buying});
+ const submit=document.querySelector('.btn-pay-submit');if(submit){const text=[...submit.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());if(text)text.textContent=buying?' حفظ المشتريات':' بيع'}
+ const currencyLabel=$('currency-select')?.closest('.form-group')?.querySelector('label');if(currencyLabel)currencyLabel.textContent=buying?'عملة الدفع':'عملة البيع';
+ const negative=$('allow-negative')?.closest('label');if(negative)negative.style.display=buying?'none':'';
+ const saleBtn=$('btn-sales');if(saleBtn)saleBtn.textContent=buying?'مشتريات':'بيع';
+ const groupLabel=document.querySelector('.invoice-meta-bar .form-group:nth-child(4)');if(groupLabel)groupLabel.style.display=buying?'none':'';
+ 
   const currentSearch=$('product-search')?.value||'';
   const currentCat=currentCategory;
   demoProducts.splice(0,demoProducts.length,...data.products.map(p=>({
@@ -90,11 +99,11 @@
   if(!categories.some(c=>c.id===currentCat))currentCategory='all';
   currentCart.splice(0,currentCart.length,...data.cart.map(l=>({...l,name:escapeHTML(l.name),code:escapeHTML(l.code),img:safeImage(l.img),selectedUnit:escapeHTML(l.selectedUnit),units:l.units.map(u=>({...u,name:escapeHTML(u.name)}))})));
   setOptions('warehouse-select',options(data.warehouses,data.warehouse));
-  setOptions('customer-select',options(data.customers,data.customer,'عميل نقدي افتراضي (نقدي)'));
+  setOptions('customer-select',options(data.customers,data.customer,data.kind==='purchase'?'اختر المورد':'عميل نقدي افتراضي (نقدي)'));
   setOptions('currency-select',options(data.currencies,data.currency));
   // Display the active real company name without changing the copied layout.
   const brand=document.querySelector('.app-header .header-brand > span:not(.brand-badge)');
-  if(brand)brand.textContent=(data.company||'الوثيق')+' | نقطة البيع';
+  if(brand)brand.textContent=(data.company||'الوثيق')+(buying?' | كاشير المشتريات':' | نقطة البيع');
   const group=document.querySelector('#products-grid');
   if(group && data.products.length===0)group.dataset.companyEmpty='true';
   else if(group)delete group.dataset.companyEmpty;

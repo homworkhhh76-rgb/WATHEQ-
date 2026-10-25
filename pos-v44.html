@@ -766,7 +766,7 @@
             <label>خصم الفاتورة</label>
             <div style="display: flex; gap: 2px;">
                 <input type="number" class="form-control" id="inv-discount" value="0" oninput="renderCart()">
-                <select class="form-control" id="inv-discount-type" style="width: 50px;" onchange="renderCart()">
+                <select class="form-control" id="inv-discount-type" style="width: 100px; min-width:100px;" onchange="renderCart()">
                     <option value="val">مبلغ</option>
                     <option value="pct">%</option>
                 </select>
@@ -976,7 +976,7 @@
             document.getElementById('prod-count-disp').innerText = filtered.length;
 
             grid.innerHTML = filtered.map(p => {
-                const isOut = p.stock <= 0;
+                const isOut = p.stock <= 0 && !document.body.classList.contains('w54-purchase');
                 return `
                     <div class="product-card" onclick="addToCartById(${p.id})">
                         <span class="stock-badge" style="${isOut ? 'background: var(--danger);' : ''}">
